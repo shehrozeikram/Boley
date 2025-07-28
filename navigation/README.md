@@ -29,11 +29,7 @@ AppNavigator
 ├── CategoryListing
 ├── Search
 ├── RecentlyViewed
-├── MobileDetail
-├── VehicleDetail
-├── PropertyDetail
-├── ElectronicsDetail
-└── JobsDetail
+└── Detail (Dynamic - handles all categories)
 ```
 
 ## Navigation Features
@@ -49,18 +45,17 @@ AppNavigator
 - **CategoryListing**: Shows items from a specific category
 - **Search**: Dedicated search screen with global search functionality
 - **RecentlyViewed**: Shows all recently viewed items in a grid layout
-- **Detail Screens**: Individual item detail pages for each category
+- **Detail**: Dynamic detail screen that handles all categories (Mobile, Vehicle, Property, Electronics, Jobs)
 
 ## Usage
 
-### Navigating to Detail Screens
+### Navigating to Detail Screen
 ```javascript
-// From HomeScreen or CategoryListingScreen
-navigation.navigate('MobileDetail', { item: itemData });
-navigation.navigate('VehicleDetail', { item: itemData });
-navigation.navigate('PropertyDetail', { item: itemData });
-navigation.navigate('ElectronicsDetail', { item: itemData });
-navigation.navigate('JobsDetail', { item: itemData });
+// From any screen
+navigation.navigate('Detail', { 
+  category: 'Mobile', // or 'Vehicle', 'Property', 'Electronics', 'Job'
+  item: itemData 
+});
 ```
 
 ### Navigating to Category Listing

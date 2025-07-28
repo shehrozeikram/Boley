@@ -23,18 +23,18 @@ const SellScreen = ({ navigation }) => {
     { name: 'Books', icon: '📚', color: '#00d2d3' },
   ];
 
-  const handleCategoryPress = (category) => {
-    Alert.alert(
-      'Sell on Boly',
-      `Create your ${category.name} listing and reach thousands of buyers!`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Start Selling', onPress: () => {
-          Alert.alert('Coming Soon', `${category.name} selling feature will be available soon!`);
-        }}
-      ]
-    );
-  };
+  // const handleCategoryPress = (category) => {
+  //   Alert.alert(
+  //     'Sell on Boly',
+  //     `Create your ${category.name} listing and reach thousands of buyers!`,
+  //     [
+  //       { text: 'Cancel', style: 'cancel' },
+  //       { text: 'Start Selling', onPress: () => {
+  //         Alert.alert('Coming Soon', `${category.name} selling feature will be available soon!`);
+  //       }}
+  //     ]
+  //   );
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,11 +66,11 @@ const SellScreen = ({ navigation }) => {
           <Text style={styles.sectionTitle}>What are you selling?</Text>
           <View style={styles.categoriesGrid}>
             {sellCategories.map((category, index) => (
-              <TouchableOpacity 
-                key={index} 
-                style={[styles.categoryCard, { backgroundColor: category.color }]}
-                onPress={() => handleCategoryPress(category)}
-              >
+                          <TouchableOpacity 
+              key={index} 
+              style={[styles.categoryCard, { backgroundColor: category.color }]}
+              // onPress={() => handleCategoryPress(category)}
+            >
                 <Text style={styles.categoryIcon}>{category.icon}</Text>
                 <Text style={styles.categoryName}>{category.name}</Text>
               </TouchableOpacity>

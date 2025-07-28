@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,6 +10,8 @@ import {
   SafeAreaView,
   Alert,
   TextInput,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
 import LocationPickerModal from '../modals/LocationPickerModal';
 
@@ -17,6 +19,68 @@ const HomeScreen = ({ navigation = null }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const [selectedLocation, setSelectedLocation] = useState('Blue Area, Islamabad');
   const [showLocationModal, setShowLocationModal] = useState(false);
+  const [locationPermission, setLocationPermission] = useState(null);
+
+  // Request location permission when component mounts
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
+  const requestLocationPermission = async () => {
+    try {
+      if (Platform.OS === 'ios') {
+        // For iOS, show a custom alert first, then trigger system permission
+        Alert.alert(
+          'Location Access',
+          'Boly needs access to your location to show relevant ads and services in your area. This helps you find items near you.',
+          [
+            { 
+              text: 'Not Now', 
+              style: 'cancel',
+              onPress: () => {
+                setLocationPermission('denied');
+              }
+            },
+            { 
+              text: 'Allow', 
+              onPress: () => {
+                // For iOS, we'll trigger the system permission when user taps location
+                setLocationPermission('ios_ready');
+                Alert.alert(
+                  'Location Permission',
+                  'Please tap the location button below to enable location access.',
+                  [{ text: 'OK' }]
+                );
+              }
+            }
+          ]
+        );
+      } else {
+        // For Android, request permission explicitly
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Permission',
+            message: 'Boly needs access to your location to show relevant ads and services in your area.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Location permission granted');
+          setLocationPermission('granted');
+        } else {
+          console.log('Location permission denied');
+          setLocationPermission('denied');
+        }
+      }
+    } catch (error) {
+      console.error('Error requesting location permission:', error);
+      setLocationPermission('error');
+    }
+  };
 
   const categories = [
     { name: 'Mobiles', icon: '📱' },
@@ -109,16 +173,38 @@ const HomeScreen = ({ navigation = null }) => {
         {/* Location Selector */}
         <TouchableOpacity 
           style={styles.locationContainer}
-          onPress={() => setShowLocationModal(true)}
+          onPress={() => {
+            if (Platform.OS === 'ios' && locationPermission === 'ios_ready') {
+              // For iOS, trigger location permission request by showing location modal
+              setShowLocationModal(true);
+              // After showing modal, update permission state
+              setLocationPermission('ios_handled');
+            } else {
+              setShowLocationModal(true);
+            }
+          }}
         >
-          <Text style={styles.locationIcon}>📍</Text>
+          <Text style={styles.locationIcon}>
+            {locationPermission === 'granted' ? '📍' : '📍⚠️'}
+          </Text>
           <Text style={styles.locationText}>{selectedLocation.split(', ')[0]}, </Text>
           <Text style={styles.locationTextBold}>{selectedLocation.split(', ')[1]}</Text>
           <Text style={styles.dropdownIcon}>▼</Text>
+          {locationPermission !== 'granted' && locationPermission !== 'ios_ready' && (
+            <Text style={styles.locationPermissionText}>
+              {locationPermission === 'denied' ? ' (Permission needed)' : 
+               locationPermission === 'error' ? ' (Error)' : ''}
+            </Text>
+          )}
+          {locationPermission === 'ios_ready' && (
+            <Text style={styles.locationPermissionText}>
+              (Tap to enable)
+            </Text>
+          )}
         </TouchableOpacity>
 
         {/* Promotional Banner */}
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={styles.promoBanner}
           onPress={() => {
             Alert.alert(
@@ -132,7 +218,8 @@ const HomeScreen = ({ navigation = null }) => {
               ]
             );
           }}
-        >
+        > */}
+        <View style={styles.promoBanner}>
           <View style={styles.promoContent}>
             <View style={styles.promoLeft}>
               <Text style={styles.olxLogo}>boly.pk</Text>
@@ -155,7 +242,7 @@ const HomeScreen = ({ navigation = null }) => {
               </View>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
 
         {/* Category Grid */}
         <View style={styles.categoryGrid}>
@@ -207,23 +294,12 @@ const HomeScreen = ({ navigation = null }) => {
                 key={item.id} 
                 style={styles.recentCard}
                 onPress={() => {
-                  // Navigate to appropriate detail screen based on category
+                  // Navigate to dynamic detail screen
                   if (navigation) {
-                    const category = item.category.toLowerCase();
-                    if (category.includes('mobile')) {
-                      navigation.navigate('MobileDetail', { item });
-                    } else if (category.includes('vehicle')) {
-                      navigation.navigate('VehicleDetail', { item });
-                    } else if (category.includes('property')) {
-                      navigation.navigate('PropertyDetail', { item });
-                    } else if (category.includes('electronics')) {
-                      navigation.navigate('ElectronicsDetail', { item });
-                    } else if (category.includes('job')) {
-                      navigation.navigate('JobsDetail', { item });
-                    } else {
-                      // Default to mobile detail for now
-                      navigation.navigate('MobileDetail', { item });
-                    }
+                    navigation.navigate('Detail', { 
+                      category: item.category,
+                      item: item 
+                    });
                   } else {
                     Alert.alert('Navigation Error', 'Navigation is not available');
                   }
@@ -391,6 +467,11 @@ const styles = StyleSheet.create({
   dropdownIcon: {
     fontSize: 12,
     color: '#666',
+  },
+  locationPermissionText: {
+    fontSize: 10,
+    color: '#ff6b6b',
+    marginLeft: 5,
   },
   promoBanner: {
     backgroundColor: '#ff6b35',

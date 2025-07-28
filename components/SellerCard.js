@@ -33,9 +33,9 @@ const SellerCard = ({
           </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.viewProfileButton} onPress={onViewProfile}>
-        <Text style={styles.viewProfileText}>View Profile</Text>
-      </TouchableOpacity>
+              {/* <TouchableOpacity style={styles.viewProfileButton} onPress={onViewProfile}>
+          <Text style={styles.viewProfileText}>View Profile</Text>
+        </TouchableOpacity> */}
     </View>
   );
 };

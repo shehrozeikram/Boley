@@ -30,9 +30,9 @@ const DetailHeader = ({
       )}
       
       <View style={styles.headerActions}>
-        <TouchableOpacity style={styles.headerAction} onPress={onShare}>
+        {/* <TouchableOpacity style={styles.headerAction} onPress={onShare}>
           <Text style={styles.headerActionIcon}>📤</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity style={styles.headerAction} onPress={onFavorite}>
           <Text style={styles.headerActionIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
         </TouchableOpacity>

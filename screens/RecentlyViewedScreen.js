@@ -125,20 +125,10 @@ const RecentlyViewedScreen = ({ navigation, route }) => {
 
   const handleItemPress = (item) => {
     if (navigation) {
-      const category = item.category.toLowerCase();
-      if (category.includes('mobile')) {
-        navigation.navigate('MobileDetail', { item });
-      } else if (category.includes('vehicle')) {
-        navigation.navigate('VehicleDetail', { item });
-      } else if (category.includes('property')) {
-        navigation.navigate('PropertyDetail', { item });
-      } else if (category.includes('electronics')) {
-        navigation.navigate('ElectronicsDetail', { item });
-      } else if (category.includes('job')) {
-        navigation.navigate('JobsDetail', { item });
-      } else {
-        navigation.navigate('MobileDetail', { item });
-      }
+      navigation.navigate('Detail', { 
+        category: item.category,
+        item: item 
+      });
     }
   };
 

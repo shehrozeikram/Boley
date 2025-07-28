@@ -13,15 +13,11 @@ import CategoryListingScreen from '../screens/CategoryListingScreen';
 import SellScreen from '../screens/SellScreen';
 import SearchScreen from '../screens/SearchScreen';
 import RecentlyViewedScreen from '../screens/RecentlyViewedScreen';
+import LoginScreen from '../screens/LoginScreen';
+import SignUpScreen from '../screens/SignUpScreen';
 
-// Import detail screens
-import {
-  MobileDetailScreen,
-  VehicleDetailScreen,
-  PropertyDetailScreen,
-  ElectronicsDetailScreen,
-  JobsDetailScreen,
-} from '../screens/detail';
+// Import detail screen
+import DetailScreen from '../screens/detail/DetailScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,8 +70,8 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Chats" component={ChatsScreen} />
-      <Tab.Screen 
+      {/* <Tab.Screen name="Chats" component={ChatsScreen} /> */}
+      {/* <Tab.Screen 
         name="Sell" 
         component={SellScreen}
         options={{
@@ -100,8 +96,8 @@ const TabNavigator = () => {
           ),
           tabBarLabel: 'Sell',
         }}
-      />
-      <Tab.Screen name="MyAds" component={MyAdsScreen} />
+      /> */}
+      {/* <Tab.Screen name="MyAds" component={MyAdsScreen} /> */}
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );
@@ -116,44 +112,13 @@ const AppNavigator = () => {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="MainTabs" component={TabNavigator} />
+        {/* <Stack.Screen name="MainTabs" component={TabNavigator} /> */}
+        <Stack.Screen name="Home" component={HomeScreen} />
         
-        {/* Detail Screens */}
+        {/* Detail Screen */}
         <Stack.Screen 
-          name="MobileDetail" 
-          component={MobileDetailScreen}
-          options={{
-            headerShown: false,
-            presentation: 'card',
-          }}
-        />
-        <Stack.Screen 
-          name="VehicleDetail" 
-          component={VehicleDetailScreen}
-          options={{
-            headerShown: false,
-            presentation: 'card',
-          }}
-        />
-        <Stack.Screen 
-          name="PropertyDetail" 
-          component={PropertyDetailScreen}
-          options={{
-            headerShown: false,
-            presentation: 'card',
-          }}
-        />
-        <Stack.Screen 
-          name="ElectronicsDetail" 
-          component={ElectronicsDetailScreen}
-          options={{
-            headerShown: false,
-            presentation: 'card',
-          }}
-        />
-        <Stack.Screen 
-          name="JobsDetail" 
-          component={JobsDetailScreen}
+          name="Detail" 
+          component={DetailScreen}
           options={{
             headerShown: false,
             presentation: 'card',
@@ -187,6 +152,26 @@ const AppNavigator = () => {
           options={{
             headerShown: false,
             presentation: 'card',
+          }}
+        />
+        
+        {/* Login Screen */}
+        <Stack.Screen 
+          name="Login" 
+          component={LoginScreen}
+          options={{
+            headerShown: false,
+            presentation: 'modal',
+          }}
+        />
+        
+        {/* SignUp Screen */}
+        <Stack.Screen 
+          name="SignUp" 
+          component={SignUpScreen}
+          options={{
+            headerShown: false,
+            presentation: 'modal',
           }}
         />
       </Stack.Navigator>

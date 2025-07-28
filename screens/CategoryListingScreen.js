@@ -14,6 +14,7 @@ const CategoryListingScreen = ({ route, navigation }) => {
   const { category, searchQuery: initialSearchQuery } = route.params || { category: 'Category' };
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery || '');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('All');
   
   // Mock data for category listings
   const getCategoryItems = (categoryName) => {
@@ -178,32 +179,69 @@ const CategoryListingScreen = ({ route, navigation }) => {
 
   const categoryItems = getCategoryItems(category);
 
-  // Filter items based on search query
+  // Helper function to convert time string to hours for sorting
+  const getTimeInHours = (timeStr) => {
+    if (timeStr.includes('hour')) {
+      return parseInt(timeStr.match(/\d+/)[0]);
+    } else if (timeStr.includes('day')) {
+      return parseInt(timeStr.match(/\d+/)[0]) * 24;
+    } else if (timeStr.includes('week')) {
+      return parseInt(timeStr.match(/\d+/)[0]) * 168;
+    } else if (timeStr.includes('month')) {
+      return parseInt(timeStr.match(/\d+/)[0]) * 720;
+    }
+    return 999; // Default for unknown time formats
+  };
+
+  // Filter and sort items based on search query and active filter
   const filteredItems = useMemo(() => {
-    if (!searchQuery.trim()) return categoryItems;
-    return categoryItems.filter(item =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.price.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery, categoryItems]);
+    let items = categoryItems;
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      items = items.filter(item =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.price.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.location.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    // Apply sorting filter
+    switch (activeFilter) {
+      case 'Price: Low to High':
+        items = [...items].sort((a, b) => {
+          const priceA = parseInt(a.price.replace(/[^\d]/g, ''));
+          const priceB = parseInt(b.price.replace(/[^\d]/g, ''));
+          return priceA - priceB;
+        });
+        break;
+      case 'Price: High to Low':
+        items = [...items].sort((a, b) => {
+          const priceA = parseInt(a.price.replace(/[^\d]/g, ''));
+          const priceB = parseInt(b.price.replace(/[^\d]/g, ''));
+          return priceB - priceA;
+        });
+        break;
+      case 'Newest First':
+        items = [...items].sort((a, b) => {
+          const timeA = getTimeInHours(a.time);
+          const timeB = getTimeInHours(b.time);
+          return timeA - timeB;
+        });
+        break;
+      default: // 'All' - no sorting
+        break;
+    }
+    
+    return items;
+  }, [categoryItems, searchQuery, activeFilter]);
 
   const handleItemPress = (item) => {
-    // Navigate to appropriate detail screen based on category
-    const categoryName = category.toLowerCase();
-    if (categoryName.includes('mobile')) {
-      navigation.navigate('MobileDetail', { item });
-    } else if (categoryName.includes('vehicle')) {
-      navigation.navigate('VehicleDetail', { item });
-    } else if (categoryName.includes('property')) {
-      navigation.navigate('PropertyDetail', { item });
-    } else if (categoryName.includes('electronics')) {
-      navigation.navigate('ElectronicsDetail', { item });
-    } else if (categoryName.includes('job')) {
-      navigation.navigate('JobsDetail', { item });
-    } else {
-      navigation.navigate('MobileDetail', { item });
-    }
+    // Navigate to dynamic detail screen
+    navigation.navigate('Detail', { 
+      category: category,
+      item: item 
+    });
   };
 
   return (
@@ -251,17 +289,29 @@ const CategoryListingScreen = ({ route, navigation }) => {
       {/* Filters */}
       <View style={styles.filtersContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity style={styles.filterChip}>
-            <Text style={styles.filterChipText}>All</Text>
+          <TouchableOpacity 
+            style={[styles.filterChip, activeFilter === 'All' && styles.activeFilterChip]}
+            onPress={() => setActiveFilter('All')}
+          >
+            <Text style={[styles.filterChipText, activeFilter === 'All' && styles.activeFilterChipText]}>All</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.filterChip}>
-            <Text style={styles.filterChipText}>Price: Low to High</Text>
+          <TouchableOpacity 
+            style={[styles.filterChip, activeFilter === 'Price: Low to High' && styles.activeFilterChip]}
+            onPress={() => setActiveFilter('Price: Low to High')}
+          >
+            <Text style={[styles.filterChipText, activeFilter === 'Price: Low to High' && styles.activeFilterChipText]}>Price: Low to High</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.filterChip}>
-            <Text style={styles.filterChipText}>Price: High to Low</Text>
+          <TouchableOpacity 
+            style={[styles.filterChip, activeFilter === 'Price: High to Low' && styles.activeFilterChip]}
+            onPress={() => setActiveFilter('Price: High to Low')}
+          >
+            <Text style={[styles.filterChipText, activeFilter === 'Price: High to Low' && styles.activeFilterChipText]}>Price: High to Low</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.filterChip}>
-            <Text style={styles.filterChipText}>Newest First</Text>
+          <TouchableOpacity 
+            style={[styles.filterChip, activeFilter === 'Newest First' && styles.activeFilterChip]}
+            onPress={() => setActiveFilter('Newest First')}
+          >
+            <Text style={[styles.filterChipText, activeFilter === 'Newest First' && styles.activeFilterChipText]}>Newest First</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
@@ -415,6 +465,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     fontWeight: '500',
+  },
+  activeFilterChip: {
+    backgroundColor: '#4ecdc4',
+    borderColor: '#4ecdc4',
+  },
+  activeFilterChipText: {
+    color: '#fff',
+    fontWeight: '600',
   },
   itemsList: {
     flex: 1,

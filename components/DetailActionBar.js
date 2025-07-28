@@ -23,7 +23,7 @@ const DetailActionBar = ({
         <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.chatButton} onPress={onChat}>
+      {/* <TouchableOpacity style={styles.chatButton} onPress={onChat}>
         <Text style={styles.chatButtonText}>{chatText}</Text>
       </TouchableOpacity>
       
@@ -35,7 +35,7 @@ const DetailActionBar = ({
         <TouchableOpacity style={styles.visitButton} onPress={onVisit}>
           <Text style={styles.visitButtonText}>{visitText}</Text>
         </TouchableOpacity>
-      )}
+      )} */}
     </View>
   );
 };

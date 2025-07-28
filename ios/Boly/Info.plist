@@ -33,6 +33,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Boly needs access to your location to show relevant ads and services in your area.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Boly needs camera access to let you take photos of items you want to sell</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Boly needs photo library access to let you select photos of items you want to sell</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
