@@ -5,9 +5,11 @@
  * @format
  */
 
+import 'react-native-gesture-handler';
 import React, { useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from './screens/SplashScreen';
-import HomeScreen from './screens/HomeScreen';
+import AppNavigator from './navigation/AppNavigator';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -20,7 +22,11 @@ function App() {
     return <SplashScreen onVideoEnd={handleSplashEnd} />;
   }
 
-  return <HomeScreen />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppNavigator />
+    </GestureHandlerRootView>
+  );
 }
 
 export default App; 
