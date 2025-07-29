@@ -1,4 +1,48 @@
 {
   "name": "Boly",
-  "displayName": "Boly"
+  "displayName": "Boly",
+  "expo": {
+    "name": "Boly",
+    "slug": "boly",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/boly_logo.jpg",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/boly_logo.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.boly.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Boly needs access to your location to show relevant ads and services in your area.",
+        "NSCameraUsageDescription": "Boly needs camera access to let you take photos of items you want to sell",
+        "NSPhotoLibraryUsageDescription": "Boly needs photo library access to let you select photos of items you want to sell"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/boly_logo.jpg",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.boly.app",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/images/boly_logo.jpg"
+    }
+  }
 }
