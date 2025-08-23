@@ -1,121 +1,121 @@
-# App Store Submission - Non-Functional Elements Cleanup
+# App Store Submission Checklist
 
-## Overview
-This document tracks all the changes made to prepare the Boly app for App Store submission by commenting out non-functional buttons and features that could cause rejection during Apple's review process.
+## ✅ Completed Changes
 
-## Changes Made
+### 1. App Configuration
+- [x] Updated `app.json` with proper bundle identifier
+- [x] Added iOS configuration with permissions
+- [x] Set version to 1.0.0
+- [x] Added build number
 
-### 1. HomeScreen.js
-**File**: `screens/HomeScreen.js`
-- **Promotional Banner**: Converted from `TouchableOpacity` to `View` (removed onPress functionality)
-- **Status**: ✅ Commented out - No longer shows "Coming Soon" alerts
+### 2. Permissions
+- [x] Location permission description
+- [x] Camera permission description  
+- [x] Photo library permission description
 
-### 2. SellScreen.js
-**File**: `screens/SellScreen.js`
-- **Category Buttons**: Commented out `handleCategoryPress` function and `onPress` handlers
-- **Status**: ✅ Commented out - No longer shows "Coming Soon" alerts for selling categories
+## 🔄 Required Changes
 
-### 3. Detail Screens - Action Buttons
-**Files**: 
-- `screens/detail/MobileDetailScreen.js`
-- `screens/detail/VehicleDetailScreen.js`
-- `screens/detail/PropertyDetailScreen.js`
-- `screens/detail/ElectronicsDetailScreen.js`
-- `screens/detail/JobsDetailScreen.js`
+### 1. iOS Project Configuration
+- [ ] Open `ios/Boly.xcodeproj` in Xcode
+- [ ] Update Bundle Identifier to `com.boly.app`
+- [ ] Set Marketing Version to `1.0.0`
+- [ ] Set Current Project Version to `1`
 
-**Changes**:
-- **Call Buttons**: Commented out `handleCall` functions and button components
-- **Chat Buttons**: Commented out `handleChat` functions and button components
-- **Share Buttons**: Commented out `handleShare` functions and header share buttons
-- **Visit/Apply Buttons**: Commented out `handleScheduleVisit`, `handleApply` functions
-- **Document/Location Buttons**: Commented out `handleViewDocuments`, `handleViewLocation` functions
-- **Warranty Buttons**: Commented out `handleViewWarranty` functions
-- **Company Profile Buttons**: Commented out `handleViewCompany` functions
+### 2. App Icons
+- [ ] Create 1024x1024 App Store icon
+- [ ] Add all required icon sizes to `ios/Boly/Images.xcassets/AppIcon.appiconset/`
+- [ ] Update `Contents.json` in AppIcon.appiconset
 
-**Status**: ✅ Commented out - All action buttons that showed alerts are now disabled
+### 3. Launch Screen
+- [ ] Update `ios/Boly/LaunchScreen.storyboard`
+- [ ] Ensure it matches your app design
+- [ ] Test on different device sizes
 
-### 4. Reusable Components
-**Files**:
-- `components/DetailActionBar.js`
-- `components/DetailHeader.js`
-- `components/SellerCard.js`
+### 4. Privacy Policy
+- [ ] Create privacy policy website/page
+- [ ] Add privacy policy URL to app
+- [ ] Update Info.plist with privacy policy link
 
-**Changes**:
-- **DetailActionBar**: Commented out Chat, Call, and Visit button components
-- **DetailHeader**: Commented out Share button in header
-- **SellerCard**: Commented out "View Profile" button
+### 5. App Store Metadata
+- [ ] App name: "Boly"
+- [ ] Subtitle: "Buy and Sell Everything"
+- [ ] Keywords: "marketplace,classifieds,buy,sell,Pakistan"
+- [ ] Description (see guide for full text)
+- [ ] Screenshots for all required device sizes
 
-**Status**: ✅ Commented out - All non-functional buttons in reusable components disabled
+### 6. Testing
+- [ ] Test app thoroughly on different devices
+- [ ] Ensure no crashes during normal usage
+- [ ] Test all major features
+- [ ] Verify permissions work correctly
 
-## Functional Elements That Remain Active
+### 7. Build Configuration
+- [ ] Set build configuration to Release
+- [ ] Archive the app using Xcode
+- [ ] Export IPA for App Store Connect
 
-### ✅ Working Features
-1. **Navigation**: All screen navigation works properly
-2. **Search**: Search functionality in HomeScreen, SearchScreen, CategoryListingScreen, RecentlyViewedScreen
-3. **Category Browsing**: Category grid navigation to CategoryListingScreen
-4. **Recently Viewed**: "See All" navigation to RecentlyViewedScreen
-5. **Detail Screen Navigation**: All detail screens are accessible
-6. **Back Navigation**: All back buttons work properly
-7. **Favorite Toggle**: Heart icon functionality (visual only, no alerts)
-8. **Location Picker**: Location modal functionality
-9. **Search Filtering**: Real-time search filtering in all screens
+## 📱 Required Screenshots
 
-### 🎯 Core User Journey
-Users can now:
-- Browse categories
-- View item listings
-- Search for items
-- View item details
-- Navigate between screens
-- Toggle favorites (visual feedback only)
+### iPhone Screenshots
+- [ ] iPhone 6.7" Display (1290 x 2796)
+- [ ] iPhone 6.5" Display (1242 x 2688)  
+- [ ] iPhone 5.5" Display (1242 x 2208)
 
-## App Store Compliance
+### iPad Screenshots (if supporting iPad)
+- [ ] iPad Pro 12.9" Display (2048 x 2732)
+- [ ] iPad Pro 11" Display (1668 x 2388)
 
-### ✅ What This Achieves
-1. **No Broken Functionality**: All interactive elements either work properly or are disabled
-2. **No "Coming Soon" Alerts**: Eliminates potential rejection for incomplete features
-3. **Consistent User Experience**: Users won't encounter non-functional buttons
-4. **Professional Appearance**: App appears complete and functional
+## 🚨 Critical Items
 
-### 📋 Review Guidelines Compliance
-- ✅ No broken links or non-functional buttons
-- ✅ No placeholder content that misleads users
-- ✅ All interactive elements work as expected
-- ✅ App provides value without requiring backend services
+### Before Submission
+- [ ] App doesn't crash during testing
+- [ ] All features work as described
+- [ ] Privacy policy is accessible
+- [ ] App icons are properly sized
+- [ ] Launch screen looks professional
+- [ ] Bundle identifier is unique
+- [ ] Version numbers are correct
 
-## Future Implementation Notes
+### App Store Connect
+- [ ] App record created
+- [ ] Build uploaded successfully
+- [ ] All metadata completed
+- [ ] Screenshots uploaded
+- [ ] Privacy policy URL added
+- [ ] App review information filled
 
-### 🔄 To Re-enable Later
-When you're ready to implement these features, simply:
-1. Uncomment the relevant code sections
-2. Implement the actual functionality (calling, chatting, sharing, etc.)
-3. Replace mock alerts with real API calls
-4. Test thoroughly before re-enabling
+## 📋 Submission Checklist
 
-### 📱 Features to Implement
-1. **Call Integration**: Phone number dialing
-2. **Chat System**: Real-time messaging
-3. **Share Functionality**: Social media sharing
-4. **Document Viewing**: PDF/image viewing
-5. **Location Services**: Maps integration
-6. **Selling Flow**: Complete listing creation process
+### Final Steps
+- [ ] Submit for review
+- [ ] Answer compliance questions
+- [ ] Monitor review status
+- [ ] Respond to any review feedback
+- [ ] Prepare for release
 
-## Testing Checklist
+## 🔧 Technical Requirements
 
-### ✅ Pre-Submission Testing
-- [x] All navigation works properly
-- [x] No "Coming Soon" alerts appear
-- [x] Search functionality works
-- [x] Category browsing works
-- [x] Detail screens load properly
-- [x] Back navigation works
-- [x] No broken buttons or links
-- [x] App doesn't crash on any screen
+### Code Changes Needed
+```javascript
+// In your app, ensure these are properly configured:
+// 1. Bundle identifier in Xcode
+// 2. Version numbers
+// 3. App icons
+// 4. Launch screen
+// 5. Privacy policy integration
+```
 
-### 🎯 App Store Ready
-The app is now ready for App Store submission with all non-functional elements properly disabled while maintaining a complete and professional user experience.
+### Build Commands
+```bash
+# Clean and build for release
+cd ios
+xcodebuild clean -workspace Boly.xcworkspace -scheme Boly
+xcodebuild -workspace Boly.xcworkspace -scheme Boly -configuration Release -destination generic/platform=iOS -archivePath build/Boly.xcarchive archive
+```
 
----
-**Last Updated**: [Current Date]
-**Version**: 1.0.0
-**Status**: Ready for App Store Submission 
+## 📞 Support Resources
+
+- [Apple Developer Documentation](https://developer.apple.com/documentation/)
+- [App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
+- [App Store Connect Help](https://help.apple.com/app-store-connect/)
+- [iOS Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) 

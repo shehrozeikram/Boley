@@ -1,87 +1,131 @@
 # Privacy Policy for Boly
 
-**Last updated:** [Current Date]
+**Last updated: [Current Date]**
 
 ## Introduction
 
-Boly ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our mobile application.
+Boly ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application (the "App").
 
 ## Information We Collect
 
 ### Personal Information
-- **Name and Contact Information**: When you create an account, we collect your name, email address, and phone number.
-- **Location Data**: We collect your location information to show relevant ads and services in your area.
-- **Photos**: We may access your camera and photo library to allow you to upload photos of items you want to sell.
+- **Account Information**: Name, email address, phone number
+- **Profile Information**: Profile pictures, location preferences
+- **Contact Information**: Phone numbers, email addresses for communication
 
 ### Usage Information
-- **App Usage**: We collect information about how you use our app, including which features you access and how often you use them.
-- **Device Information**: We may collect information about your device, including device type, operating system, and unique device identifiers.
+- **App Usage**: Features used, pages visited, time spent
+- **Device Information**: Device type, operating system, unique device identifiers
+- **Location Data**: Your location when you enable location services
+
+### Content Information
+- **Listings**: Photos, descriptions, prices of items you post
+- **Messages**: Communications with other users
+- **Search History**: Items you search for and view
 
 ## How We Use Your Information
 
-We use the information we collect to:
-- Provide and maintain our services
-- Process transactions and manage your account
-- Show relevant ads and services in your area
-- Improve our app and user experience
-- Communicate with you about your account and our services
-- Ensure the security and integrity of our platform
+### To Provide Our Services
+- Display your listings to other users
+- Enable communication between buyers and sellers
+- Provide location-based search results
+- Send notifications about your listings
+
+### To Improve Our Services
+- Analyze app usage patterns
+- Develop new features
+- Improve user experience
+- Provide customer support
+
+### To Ensure Security
+- Prevent fraud and abuse
+- Verify user identities
+- Protect against unauthorized access
 
 ## Information Sharing
 
-We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except in the following circumstances:
-- **Service Providers**: We may share information with trusted third-party service providers who assist us in operating our app.
-- **Legal Requirements**: We may disclose information if required by law or to protect our rights and safety.
-- **Business Transfers**: In the event of a merger, acquisition, or sale of assets, your information may be transferred.
+### With Other Users
+- Your listings are visible to all app users
+- Contact information may be shared when you communicate with other users
+
+### With Service Providers
+- Cloud storage providers
+- Analytics services
+- Customer support tools
+
+### Legal Requirements
+- When required by law
+- To protect our rights and safety
+- In response to legal requests
 
 ## Data Security
 
-We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
-
-## Data Retention
-
-We retain your personal information for as long as necessary to provide our services and comply with legal obligations. You may request deletion of your account and associated data at any time.
+We implement appropriate security measures to protect your information:
+- Encryption of data in transit and at rest
+- Regular security assessments
+- Access controls and authentication
+- Secure data storage practices
 
 ## Your Rights
 
-You have the right to:
-- Access and update your personal information
-- Delete your account and associated data
-- Opt out of certain communications
-- Request information about how we process your data
+### Access and Control
+- View and update your profile information
+- Delete your account and data
+- Opt out of marketing communications
+- Control location permissions
+
+### Data Portability
+- Export your data in a standard format
+- Transfer your information to other services
 
 ## Location Services
 
 Our app uses location services to:
-- Show relevant ads and services in your area
-- Help buyers find items near them
-- Improve the accuracy of location-based features
+- Show relevant listings in your area
+- Enable location-based search
+- Improve user experience
 
-You can control location access through your device settings.
-
-## Camera and Photo Library Access
-
-We request access to your camera and photo library to:
-- Allow you to take photos of items you want to sell
-- Enable you to select existing photos for your listings
-
-You can control camera and photo library access through your device settings.
+You can control location permissions in your device settings.
 
 ## Children's Privacy
 
-Our app is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.
+Our app is not intended for children under 13. We do not knowingly collect personal information from children under 13.
 
 ## Changes to This Policy
 
-We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+We may update this Privacy Policy from time to time. We will notify you of any changes by:
+- Posting the new policy in the app
+- Sending you an email notification
+- Updating the "Last updated" date
 
 ## Contact Us
 
-If you have any questions about this Privacy Policy, please contact us at:
+If you have questions about this Privacy Policy, please contact us:
 
-**Email:** privacy@boly.pk  
-**Address:** [Your Business Address]
+**Email**: privacy@boly.app
+**Address**: [Your Business Address]
+**Phone**: [Your Phone Number]
+
+## Data Retention
+
+We retain your information for as long as necessary to:
+- Provide our services
+- Comply with legal obligations
+- Resolve disputes
+- Enforce our agreements
+
+## International Transfers
+
+Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place for such transfers.
+
+## Third-Party Services
+
+Our app may contain links to third-party services. We are not responsible for the privacy practices of these services.
 
 ## Consent
 
-By using our app, you consent to the collection and use of your information as described in this Privacy Policy. 
+By using our app, you consent to the collection and use of your information as described in this Privacy Policy.
+
+---
+
+**Note**: This is a template privacy policy. Please customize it according to your specific app features and legal requirements. Consider consulting with a legal professional to ensure compliance with applicable laws and regulations. 

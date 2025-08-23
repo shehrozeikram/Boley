@@ -20,34 +20,7 @@ const CategoryListingScreen = ({ route, navigation }) => {
   const getCategoryItems = (categoryName) => {
     const category = categoryName.toLowerCase();
     
-    if (category.includes('mobile')) {
-      return [
-        {
-          id: '1',
-          title: 'iPhone 13 Pro Max',
-          price: 'Rs 180,000',
-          location: 'Blue Area, Islamabad',
-          image: '📱',
-          time: '2 hours ago'
-        },
-        {
-          id: '2',
-          title: 'Samsung Galaxy S21',
-          price: 'Rs 150,000',
-          location: 'F-7 Markaz, Islamabad',
-          image: '📱',
-          time: '1 day ago'
-        },
-        {
-          id: '3',
-          title: 'OnePlus 9 Pro',
-          price: 'Rs 120,000',
-          location: 'DHA, Lahore',
-          image: '📱',
-          time: '3 days ago'
-        }
-      ];
-    } else if (category.includes('vehicle')) {
+    if (category.includes('vehicle')) {
       return [
         {
           id: '1',

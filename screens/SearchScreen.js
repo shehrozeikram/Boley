@@ -16,28 +16,9 @@ const SearchScreen = ({ route, navigation }) => {
 
   // Mock data for search results across all categories
   const allItems = [
-    // Mobiles
-    {
-      id: '1',
-      title: 'iPhone 13 Pro Max',
-      price: 'Rs 180,000',
-      location: 'Blue Area, Islamabad',
-      image: '📱',
-      category: 'Mobiles',
-      time: '2 hours ago'
-    },
-    {
-      id: '2',
-      title: 'Samsung Galaxy S21',
-      price: 'Rs 150,000',
-      location: 'F-7 Markaz, Islamabad',
-      image: '📱',
-      category: 'Mobiles',
-      time: '1 day ago'
-    },
     // Vehicles
     {
-      id: '3',
+      id: '1',
       title: 'Honda Civic 2020',
       price: 'Rs 4,500,000',
       location: 'F-7 Markaz, Islamabad',
@@ -46,7 +27,7 @@ const SearchScreen = ({ route, navigation }) => {
       time: '1 day ago'
     },
     {
-      id: '4',
+      id: '2',
       title: 'Toyota Corolla 2019',
       price: 'Rs 3,800,000',
       location: 'DHA, Lahore',
@@ -56,7 +37,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Property
     {
-      id: '5',
+      id: '3',
       title: '3 Bedroom Apartment',
       price: 'Rs 25,000/month',
       location: 'DHA, Lahore',
@@ -65,7 +46,7 @@ const SearchScreen = ({ route, navigation }) => {
       time: '3 days ago'
     },
     {
-      id: '6',
+      id: '4',
       title: '2 Bedroom Flat',
       price: 'Rs 20,000/month',
       location: 'Gulberg, Lahore',
@@ -75,7 +56,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Electronics
     {
-      id: '7',
+      id: '5',
       title: 'MacBook Pro M2',
       price: 'Rs 350,000',
       location: 'Gulberg, Lahore',
@@ -84,7 +65,7 @@ const SearchScreen = ({ route, navigation }) => {
       time: '1 week ago'
     },
     {
-      id: '8',
+      id: '6',
       title: 'Dell XPS 13',
       price: 'Rs 280,000',
       location: 'Blue Area, Islamabad',
@@ -94,7 +75,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Jobs
     {
-      id: '9',
+      id: '7',
       title: 'Senior React Native Developer',
       price: 'Rs 150,000 - 200,000',
       location: 'Karachi, Pakistan',
@@ -103,7 +84,7 @@ const SearchScreen = ({ route, navigation }) => {
       time: '2 days ago'
     },
     {
-      id: '10',
+      id: '8',
       title: 'Frontend Developer',
       price: 'Rs 120,000 - 150,000',
       location: 'Lahore, Pakistan',
@@ -113,7 +94,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Services
     {
-      id: '11',
+      id: '9',
       title: 'House Cleaning Service',
       price: 'Rs 2,000/day',
       location: 'Islamabad, Pakistan',
@@ -123,7 +104,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Animals
     {
-      id: '12',
+      id: '10',
       title: 'Golden Retriever Puppy',
       price: 'Rs 45,000',
       location: 'Clifton, Karachi',
@@ -133,7 +114,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Furniture
     {
-      id: '13',
+      id: '11',
       title: 'Leather Sofa Set',
       price: 'Rs 85,000',
       location: 'Gulberg, Lahore',
@@ -143,7 +124,7 @@ const SearchScreen = ({ route, navigation }) => {
     },
     // Fashion
     {
-      id: '14',
+      id: '12',
       title: 'Designer Dress Collection',
       price: 'Rs 15,000',
       location: 'Blue Area, Islamabad',
@@ -175,9 +156,9 @@ const SearchScreen = ({ route, navigation }) => {
     navigation.navigate('CategoryListing', { category });
   };
 
-  // Popular search suggestions
-  const popularSearches = [
-    'iPhone', 'Honda Civic', 'Apartment', 'MacBook', 'Developer', 'Puppy', 'Sofa'
+  // Search suggestions
+  const searchSuggestions = [
+    'Honda Civic', 'Apartment', 'MacBook', 'Developer', 'Puppy', 'Sofa'
   ];
 
   return (
@@ -227,7 +208,7 @@ const SearchScreen = ({ route, navigation }) => {
           <View style={styles.popularSection}>
             <Text style={styles.sectionTitle}>Popular Searches</Text>
             <View style={styles.popularGrid}>
-              {popularSearches.map((search, index) => (
+              {searchSuggestions.map((search, index) => (
                 <TouchableOpacity 
                   key={index}
                   style={styles.popularChip}
@@ -240,18 +221,20 @@ const SearchScreen = ({ route, navigation }) => {
             
             <Text style={styles.sectionTitle}>Browse Categories</Text>
             <View style={styles.categoriesGrid}>
-              {['Mobiles', 'Vehicles', 'Property', 'Electronics', 'Jobs', 'Services'].map((category, index) => (
+              {['Vehicles', 'Property', 'Electronics', 'Jobs', 'Services', 'Animals', 'Furniture', 'Fashion'].map((category, index) => (
                 <TouchableOpacity 
                   key={index}
                   style={styles.categoryCard}
                   onPress={() => handleCategoryPress(category)}
                 >
                   <Text style={styles.categoryIcon}>
-                    {category === 'Mobiles' ? '📱' : 
-                     category === 'Vehicles' ? '🚗' : 
+                    {category === 'Vehicles' ? '🚗' : 
                      category === 'Property' ? '🏠' : 
                      category === 'Electronics' ? '💻' : 
-                     category === 'Jobs' ? '💼' : '🔧'}
+                     category === 'Jobs' ? '💼' : 
+                     category === 'Services' ? '🔧' : 
+                     category === 'Animals' ? '🐕' : 
+                     category === 'Furniture' ? '🛏️' : '👗'}
                   </Text>
                   <Text style={styles.categoryName}>{category}</Text>
                 </TouchableOpacity>

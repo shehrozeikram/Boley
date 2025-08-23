@@ -42,37 +42,7 @@ const DetailScreen = ({ route, navigation }) => {
   const getSimilarProducts = (categoryName, currentItem) => {
     const category = categoryName?.toLowerCase() || '';
     
-    if (category.includes('mobile')) {
-      return [
-        {
-          id: 'similar1',
-          title: 'iPhone 12 Pro',
-          price: 'Rs 150,000',
-          location: 'Blue Area, Islamabad',
-          image: '📱',
-          category: 'Mobiles',
-          time: '1 day ago'
-        },
-        {
-          id: 'similar2',
-          title: 'Samsung Galaxy S21',
-          price: 'Rs 140,000',
-          location: 'F-7 Markaz, Islamabad',
-          image: '📱',
-          category: 'Mobiles',
-          time: '2 days ago'
-        },
-        {
-          id: 'similar3',
-          title: 'OnePlus 9 Pro',
-          price: 'Rs 130,000',
-          location: 'DHA, Lahore',
-          image: '📱',
-          category: 'Mobiles',
-          time: '3 days ago'
-        }
-      ];
-    } else if (category.includes('vehicle')) {
+    if (category.includes('vehicle')) {
       return [
         {
           id: 'similar1',
@@ -170,50 +140,7 @@ const DetailScreen = ({ route, navigation }) => {
   const getDetailData = (categoryName, itemData) => {
     const category = categoryName?.toLowerCase() || '';
     
-    if (category.includes('mobile')) {
-      return {
-        id: itemData?.id || '1',
-        title: itemData?.title || 'iPhone 13 Pro Max',
-        price: itemData?.price || 'Rs 180,000',
-        originalPrice: 'Rs 220,000',
-        location: itemData?.location || 'Blue Area, Islamabad',
-        postedDate: itemData?.time || '2 hours ago',
-        condition: 'Used',
-        brand: 'Apple',
-        model: 'iPhone 13 Pro Max',
-        storage: '256GB',
-        color: 'Sierra Blue',
-        batteryHealth: '95%',
-        description: 'Excellent condition iPhone 13 Pro Max with 256GB storage. No scratches, perfect battery health. Comes with original box and charger. Reason for selling: upgrading to iPhone 15.',
-        images: ['📱', '📱', '📱', '📱'],
-        seller: {
-          name: 'Ahmed Khan',
-          rating: 4.8,
-          totalAds: 12,
-          memberSince: '2021',
-          verified: true,
-        },
-        specifications: {
-          'Screen Size': '6.7 inches',
-          'Processor': 'A15 Bionic',
-          'RAM': '6GB',
-          'Storage': '256GB',
-          'Camera': 'Triple 12MP',
-          'Battery': '4352mAh',
-          'OS': 'iOS 15',
-          'Network': '5G',
-        },
-        features: [
-          'Face ID',
-          'Wireless Charging',
-          'Water Resistant',
-          'Dual SIM',
-          '5G Capable',
-          'Pro Camera System',
-        ],
-        category: 'Mobile'
-      };
-    } else if (category.includes('vehicle')) {
+    if (category.includes('vehicle')) {
       return {
         id: itemData?.id || '1',
         title: itemData?.title || 'Honda Civic 2020',
@@ -408,9 +335,6 @@ const DetailScreen = ({ route, navigation }) => {
         postedDate: itemData?.time || '2 days ago',
         jobType: 'Full-time',
         experience: '3-5 years',
-        company: 'TechCorp Solutions',
-        description: 'We are looking for an experienced React Native developer to join our dynamic team. You will be responsible for developing and maintaining mobile applications for iOS and Android platforms.',
-        images: ['💼', '💼', '💼', '💼'],
         company: {
           name: 'TechCorp Solutions',
           rating: 4.5,
@@ -453,14 +377,14 @@ const DetailScreen = ({ route, navigation }) => {
           'Redux/Context API',
           'Git',
           'REST APIs',
-          'Mobile UI/UX',
+          'UI/UX Design',
           'Performance optimization',
         ],
         category: 'Job'
       };
     } else {
-      // Default to mobile data
-      return getDetailData('mobile', itemData);
+      // Default to vehicle data
+      return getDetailData('vehicle', itemData);
     }
   };
 

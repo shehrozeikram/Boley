@@ -83,7 +83,6 @@ const HomeScreen = ({ navigation = null }) => {
   };
 
   const categories = [
-    { name: 'Mobiles', icon: '📱' },
     { name: 'Vehicles', icon: '🚗' },
     { name: 'Property for Sale', icon: '🏠' },
     { name: 'Property for Rent', icon: '🔑' },
@@ -98,15 +97,6 @@ const HomeScreen = ({ navigation = null }) => {
   const recentlyViewed = [
     {
       id: '1',
-      title: 'iPhone 13 Pro Max',
-      price: 'Rs 180,000',
-      location: 'Blue Area, Islamabad',
-      image: '📱',
-      category: 'Mobiles',
-      time: '2 hours ago'
-    },
-    {
-      id: '2',
       title: 'Honda Civic 2020',
       price: 'Rs 4,500,000',
       location: 'F-7 Markaz, Islamabad',
@@ -115,7 +105,7 @@ const HomeScreen = ({ navigation = null }) => {
       time: '1 day ago'
     },
     {
-      id: '3',
+      id: '2',
       title: '3 Bedroom Apartment',
       price: 'Rs 25,000/month',
       location: 'DHA, Lahore',
@@ -124,7 +114,7 @@ const HomeScreen = ({ navigation = null }) => {
       time: '3 days ago'
     },
     {
-      id: '4',
+      id: '3',
       title: 'MacBook Pro M2',
       price: 'Rs 350,000',
       location: 'Gulberg, Lahore',
@@ -133,13 +123,22 @@ const HomeScreen = ({ navigation = null }) => {
       time: '1 week ago'
     },
     {
-      id: '5',
+      id: '4',
       title: 'Golden Retriever Puppy',
       price: 'Rs 45,000',
       location: 'Clifton, Karachi',
       image: '🐕',
       category: 'Animals',
       time: '2 weeks ago'
+    },
+    {
+      id: '5',
+      title: 'Sony PlayStation 5',
+      price: 'Rs 120,000',
+      location: 'Defence, Karachi',
+      image: '🎮',
+      category: 'Electronics',
+      time: '3 weeks ago'
     }
   ];
 

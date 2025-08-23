@@ -11,7 +11,6 @@ import {
 
 const SellScreen = ({ navigation }) => {
   const sellCategories = [
-    { name: 'Mobiles', icon: '📱', color: '#4ecdc4' },
     { name: 'Vehicles', icon: '🚗', color: '#ff6b35' },
     { name: 'Property', icon: '🏠', color: '#45b7d1' },
     { name: 'Electronics', icon: '💻', color: '#96ceb4' },
