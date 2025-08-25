@@ -1,15 +1,14 @@
 # Boly - Pakistan's Premier Marketplace
 
-A React Native mobile application for buying and selling everything in Pakistan. From vehicles and properties to electronics and jobs, Boly connects buyers and sellers across the country.
+A React Native mobile application for buying and selling everything in Pakistan. From vehicles and properties to electronics and services, Boly connects buyers and sellers across the country.
 
 ## Features
 
-- **Browse Categories**: Vehicles, properties, electronics, jobs, and more
+- **Browse Categories**: Vehicles, properties, electronics, services, and more
 - **Search & Filter**: Find exactly what you're looking for with advanced search
 - **Location-Based**: Discover items near you
 - **Seller Profiles**: Verified seller information and ratings
 - **Recently Viewed**: Track items you've browsed
-- **Favorites**: Save items for later
 
 ## Getting Started
 

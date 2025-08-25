@@ -87,11 +87,6 @@ const HomeScreen = ({ navigation = null }) => {
     { name: 'Property for Sale', icon: '🏠' },
     { name: 'Property for Rent', icon: '🔑' },
     { name: 'Electronics & Home', icon: '📷' },
-    { name: 'Services', icon: '🔧' },
-    { name: 'Jobs', icon: '💼' },
-    { name: 'Animals', icon: '🐾' },
-    { name: 'Furniture & Home De...', icon: '🛏️' },
-    { name: 'Fashion & Beau...', icon: '👗' },
   ];
 
   const recentlyViewed = [
@@ -115,7 +110,7 @@ const HomeScreen = ({ navigation = null }) => {
     },
     {
       id: '3',
-      title: 'MacBook Pro M2',
+      title: 'MacBook Pro M2 14-inch',
       price: 'Rs 350,000',
       location: 'Gulberg, Lahore',
       image: '💻',
@@ -124,19 +119,19 @@ const HomeScreen = ({ navigation = null }) => {
     },
     {
       id: '4',
-      title: 'Golden Retriever Puppy',
-      price: 'Rs 45,000',
-      location: 'Clifton, Karachi',
-      image: '🐕',
-      category: 'Animals',
+      title: 'Toyota Corolla 2021',
+      price: 'Rs 3,800,000',
+      location: 'Bahria Town, Rawalpindi',
+      image: '🚗',
+      category: 'Vehicles',
       time: '2 weeks ago'
     },
     {
       id: '5',
-      title: 'Sony PlayStation 5',
-      price: 'Rs 120,000',
-      location: 'Defence, Karachi',
-      image: '🎮',
+      title: 'MacBook Air M1 13-inch',
+      price: 'Rs 280,000',
+      location: 'Blue Area, Islamabad',
+      image: '💻',
       category: 'Electronics',
       time: '3 weeks ago'
     }
@@ -234,7 +229,6 @@ const HomeScreen = ({ navigation = null }) => {
                 <Text style={styles.carListing}>Honda Civic</Text>
                 <Text style={styles.carPrice}>Rs 9,800,000</Text>
                 <View style={styles.phoneActions}>
-                  <Text style={styles.actionIcon}>❤️</Text>
                   <Text style={styles.actionIcon}>📞</Text>
                   <Text style={styles.actionIcon}>💬</Text>
                 </View>

@@ -17,7 +17,7 @@ The app uses a single, dynamic `DetailScreen` that handles all categories:
 ```javascript
 // Navigate to detail screen with category and item data
 navigation.navigate('Detail', { 
-  category: 'Vehicle', // or 'Property', 'Electronics', 'Job'
+  category: 'Vehicle', // or 'Property', 'Electronics'
   item: itemData 
 });
 ```
@@ -50,7 +50,6 @@ The DetailScreen automatically generates appropriate data based on the category:
 - **Vehicle**: Specifications, features, documents
 - **Property**: Amenities, location details, nearby places
 - **Electronics**: Specifications, warranty, accessories
-- **Jobs**: Requirements, responsibilities, benefits
 
 ## Screen Navigation Flow
 
@@ -91,8 +90,8 @@ AppNavigator
 
 ## Key Features
 
-### ✅ Dynamic Detail Screen
-- **Single Component**: Handles all categories (Vehicle, Property, Electronics, Jobs)
+### ✅ **Dynamic Detail Screen**
+- **Single Component**: Handles all categories (Vehicle, Property, Electronics)
 - **Category-Specific Data**: Automatically loads appropriate content
 - **Consistent UI**: Same layout and behavior across all categories
 

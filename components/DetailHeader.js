@@ -9,8 +9,6 @@ import {
 const DetailHeader = ({ 
   navigation, 
   onShare, 
-  onFavorite, 
-  isFavorite = false,
   title = '',
   showTitle = false 
 }) => {
@@ -33,9 +31,7 @@ const DetailHeader = ({
         {/* <TouchableOpacity style={styles.headerAction} onPress={onShare}>
           <Text style={styles.headerActionIcon}>📤</Text>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.headerAction} onPress={onFavorite}>
-          <Text style={styles.headerActionIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
-        </TouchableOpacity>
+        {/* Removed favorite button */}
       </View>
     </View>
   );

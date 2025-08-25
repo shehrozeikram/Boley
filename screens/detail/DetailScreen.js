@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 const DetailScreen = ({ route, navigation }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   // Removed login state - always show contact seller
   
   // Get category and item data from route params
@@ -39,103 +38,8 @@ const DetailScreen = ({ route, navigation }) => {
   }
   
   // Generate similar products data
-  const getSimilarProducts = (categoryName, currentItem) => {
-    const category = categoryName?.toLowerCase() || '';
-    
-    if (category.includes('vehicle')) {
-      return [
-        {
-          id: 'similar1',
-          title: 'Toyota Corolla 2019',
-          price: 'Rs 4,200,000',
-          location: 'F-7 Markaz, Islamabad',
-          image: '🚗',
-          category: 'Vehicles',
-          time: '1 day ago'
-        },
-        {
-          id: 'similar2',
-          title: 'Honda City 2021',
-          price: 'Rs 3,800,000',
-          location: 'DHA, Lahore',
-          image: '🚗',
-          category: 'Vehicles',
-          time: '2 days ago'
-        },
-        {
-          id: 'similar3',
-          title: 'Suzuki Swift 2020',
-          price: 'Rs 2,500,000',
-          location: 'Gulberg, Lahore',
-          image: '🚗',
-          category: 'Vehicles',
-          time: '3 days ago'
-        }
-      ];
-    } else if (category.includes('property')) {
-      return [
-        {
-          id: 'similar1',
-          title: '2 Bedroom Apartment',
-          price: 'Rs 22,000/month',
-          location: 'DHA, Lahore',
-          image: '🏠',
-          category: 'Property for Rent',
-          time: '1 day ago'
-        },
-        {
-          id: 'similar2',
-          title: 'Studio Apartment',
-          price: 'Rs 18,000/month',
-          location: 'Gulberg, Lahore',
-          image: '🏠',
-          category: 'Property for Rent',
-          time: '2 days ago'
-        },
-        {
-          id: 'similar3',
-          title: '1 Bedroom Flat',
-          price: 'Rs 20,000/month',
-          location: 'Clifton, Karachi',
-          image: '🏠',
-          category: 'Property for Rent',
-          time: '3 days ago'
-        }
-      ];
-    } else {
-      // Default similar products for other categories
-      return [
-        {
-          id: 'similar1',
-          title: `Similar ${categoryName} 1`,
-          price: 'Rs 100,000',
-          location: 'Blue Area, Islamabad',
-          image: '📦',
-          category: categoryName,
-          time: '1 day ago'
-        },
-        {
-          id: 'similar2',
-          title: `Similar ${categoryName} 2`,
-          price: 'Rs 90,000',
-          location: 'F-7 Markaz, Islamabad',
-          image: '📦',
-          category: categoryName,
-          time: '2 days ago'
-        },
-        {
-          id: 'similar3',
-          title: `Similar ${categoryName} 3`,
-          price: 'Rs 80,000',
-          location: 'DHA, Lahore',
-          image: '📦',
-          category: categoryName,
-          time: '3 days ago'
-        }
-      ];
-    }
-  };
-  
+  // Removed getSimilarProducts function - no longer needed
+
   // Dynamic data based on category
   const getDetailData = (categoryName, itemData) => {
     const category = categoryName?.toLowerCase() || '';
@@ -326,62 +230,6 @@ const DetailScreen = ({ route, navigation }) => {
         ],
         category: 'Electronics'
       };
-    } else if (category.includes('job')) {
-      return {
-        id: itemData?.id || '1',
-        title: itemData?.title || 'Senior React Native Developer',
-        salary: itemData?.price || 'Rs 150,000 - 200,000',
-        location: itemData?.location || 'Karachi, Pakistan',
-        postedDate: itemData?.time || '2 days ago',
-        jobType: 'Full-time',
-        experience: '3-5 years',
-        company: {
-          name: 'TechCorp Solutions',
-          rating: 4.5,
-          totalJobs: 15,
-          memberSince: '2018',
-          verified: true,
-          industry: 'Technology',
-          size: '50-100 employees',
-        },
-        requirements: {
-          'Experience': '3-5 years',
-          'Education': 'BS Computer Science',
-          'Skills': 'React Native, JavaScript, TypeScript',
-          'Location': 'Karachi, Pakistan',
-          'Job Type': 'Full-time',
-          'Remote': 'Hybrid',
-          'Visa Sponsorship': 'No',
-        },
-        responsibilities: [
-          'Develop and maintain React Native applications',
-          'Collaborate with cross-functional teams',
-          'Write clean, maintainable code',
-          'Participate in code reviews',
-          'Debug and fix issues',
-          'Optimize app performance',
-          'Stay updated with latest technologies',
-        ],
-        benefits: [
-          'Competitive salary',
-          'Health insurance',
-          'Annual bonuses',
-          'Professional development',
-          'Flexible working hours',
-          'Remote work options',
-          'Team building activities',
-        ],
-        skills: [
-          'React Native',
-          'JavaScript/TypeScript',
-          'Redux/Context API',
-          'Git',
-          'REST APIs',
-          'UI/UX Design',
-          'Performance optimization',
-        ],
-        category: 'Job'
-      };
     } else {
       // Default to vehicle data
       return getDetailData('vehicle', itemData);
@@ -398,18 +246,7 @@ const DetailScreen = ({ route, navigation }) => {
   //   Alert.alert('Start Chat', 'Opening chat with seller...');
   // };
 
-  const handleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // Alert.alert('Favorite', isFavorite ? 'Removed from favorites' : 'Added to favorites');
-  };
-
-  const handleSimilarProductPress = (similarProduct) => {
-    // Navigate to detail screen for the similar product
-    navigation.navigate('Detail', { 
-      category: similarProduct.category,
-      item: similarProduct 
-    });
-  };
+  // Removed handleSimilarProductPress function - no longer needed
 
   const handleContactSeller = () => {
     // Show seller contact information with fallbacks
@@ -661,9 +498,7 @@ const DetailScreen = ({ route, navigation }) => {
             {/* <TouchableOpacity style={styles.headerAction} onPress={handleShare}>
               <Text style={styles.headerActionIcon}>📤</Text>
             </TouchableOpacity> */}
-            <TouchableOpacity style={styles.headerAction} onPress={handleFavorite}>
-              <Text style={styles.headerActionIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
-            </TouchableOpacity>
+            {/* Removed favorite button */}
           </View>
         </View>
 
@@ -671,11 +506,6 @@ const DetailScreen = ({ route, navigation }) => {
         <View style={styles.imageContainer}>
           <View style={styles.mainImage}>
             <Text style={styles.imagePlaceholder}>{detailData.images[0]}</Text>
-          </View>
-          <View style={styles.imageIndicators}>
-            {detailData.images.map((_, index) => (
-              <View key={index} style={[styles.indicator, index === 0 && styles.activeIndicator]} />
-            ))}
           </View>
         </View>
 
@@ -739,36 +569,12 @@ const DetailScreen = ({ route, navigation }) => {
           </View>
         </View>
 
-        {/* Similar Items */}
-        <View style={styles.similarSection}>
-          <Text style={styles.sectionTitle}>Similar {detailData.category}s</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {getSimilarProducts(category, item).map((similarProduct) => (
-              <TouchableOpacity 
-                key={similarProduct.id} 
-                style={styles.similarItem}
-                onPress={() => handleSimilarProductPress(similarProduct)}
-              >
-                <View style={styles.similarImage}>
-                  <Text style={styles.similarEmoji}>{similarProduct.image}</Text>
-                </View>
-                <Text style={styles.similarTitle} numberOfLines={2}>{similarProduct.title}</Text>
-                <Text style={styles.similarPrice}>{similarProduct.price}</Text>
-                <Text style={styles.similarLocation} numberOfLines={1}>📍 {similarProduct.location}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-
         {/* Bottom Spacing */}
         <View style={styles.bottomSpacing} />
       </ScrollView>
 
       {/* Action Buttons */}
       <View style={styles.actionBar}>
-        <TouchableOpacity style={styles.favoriteButton} onPress={handleFavorite}>
-          <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.contactSellerButton} onPress={handleContactSeller}>
           <Text style={styles.contactSellerButtonText}>
             📞 Contact Seller
@@ -824,21 +630,6 @@ const styles = StyleSheet.create({
   },
   imagePlaceholder: {
     fontSize: 80,
-  },
-  imageIndicators: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 15,
-    gap: 8,
-  },
-  indicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#ddd',
-  },
-  activeIndicator: {
-    backgroundColor: '#4ecdc4',
   },
   priceSection: {
     backgroundColor: '#fff',
@@ -1029,49 +820,12 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 15,
     paddingVertical: 16,
   },
   contactSellerButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-  },
-  similarSection: {
-    backgroundColor: '#fff',
-    padding: 20,
-    marginTop: 10,
-  },
-  similarItem: {
-    width: 150,
-    marginRight: 15,
-  },
-  similarImage: {
-    height: 100,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  similarEmoji: {
-    fontSize: 30,
-  },
-  similarTitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  similarPrice: {
-    fontSize: 12,
-    color: '#4ecdc4',
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  similarLocation: {
-    fontSize: 10,
-    color: '#7f8c8d',
   },
   bottomSpacing: {
     height: 100,
@@ -1088,43 +842,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#e0e0e0',
     alignItems: 'center',
-  },
-  favoriteButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#f8f9fa',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  favoriteIcon: {
-    fontSize: 20,
-  },
-  chatButton: {
-    flex: 1,
-    backgroundColor: '#4ecdc4',
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  chatButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  callButton: {
-    flex: 1,
-    backgroundColor: '#2ecc71',
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  callButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
   },
   content: {
     flex: 1,

@@ -11,15 +11,9 @@ import {
 
 const SellScreen = ({ navigation }) => {
   const sellCategories = [
-    { name: 'Vehicles', icon: '🚗', color: '#ff6b35' },
-    { name: 'Property', icon: '🏠', color: '#45b7d1' },
+    { name: 'Vehicles', icon: '🚗', color: '#e74c3c' },
+    { name: 'Property', icon: '🏠', color: '#3498db' },
     { name: 'Electronics', icon: '💻', color: '#96ceb4' },
-    { name: 'Jobs', icon: '💼', color: '#feca57' },
-    { name: 'Services', icon: '🔧', color: '#ff9ff3' },
-    { name: 'Animals', icon: '🐾', color: '#54a0ff' },
-    { name: 'Furniture', icon: '🛏️', color: '#5f27cd' },
-    { name: 'Fashion', icon: '👗', color: '#ff6348' },
-    { name: 'Books', icon: '📚', color: '#00d2d3' },
   ];
 
   // const handleCategoryPress = (category) => {

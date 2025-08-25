@@ -7,10 +7,8 @@ import {
 } from 'react-native';
 
 const DetailActionBar = ({ 
-  onFavorite, 
   onChat, 
   onCall, 
-  isFavorite = false,
   chatText = '💬 Chat',
   callText = '📞 Call',
   showVisitButton = false,
@@ -19,9 +17,7 @@ const DetailActionBar = ({
 }) => {
   return (
     <View style={styles.actionBar}>
-      <TouchableOpacity style={styles.favoriteButton} onPress={onFavorite}>
-        <Text style={styles.favoriteIcon}>{isFavorite ? '❤️' : '🤍'}</Text>
-      </TouchableOpacity>
+      {/* Removed favorite button */}
       
       {/* <TouchableOpacity style={styles.chatButton} onPress={onChat}>
         <Text style={styles.chatButtonText}>{chatText}</Text>
@@ -52,17 +48,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
     gap: 10,
-  },
-  favoriteButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#f8f9fa',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  favoriteIcon: {
-    fontSize: 20,
   },
   chatButton: {
     flex: 1,

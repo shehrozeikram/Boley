@@ -125,11 +125,6 @@ const AccountScreen = ({ navigation }) => {
                 <Text style={styles.optionArrow}>›</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.optionItem}>
-                <Text style={styles.optionIcon}>❤️</Text>
-                <Text style={styles.optionText}>Favorites</Text>
-                <Text style={styles.optionArrow}>›</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.optionItem}>
                 <Text style={styles.optionIcon}>👁️</Text>
                 <Text style={styles.optionText}>Recently Viewed</Text>
                 <Text style={styles.optionArrow}>›</Text>

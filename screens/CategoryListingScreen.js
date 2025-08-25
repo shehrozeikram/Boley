@@ -78,7 +78,7 @@ const CategoryListingScreen = ({ route, navigation }) => {
       return [
         {
           id: '1',
-          title: 'MacBook Pro M2',
+          title: 'MacBook Pro M2 14-inch',
           price: 'Rs 350,000',
           location: 'Gulberg, Lahore',
           image: '💻',
@@ -86,7 +86,7 @@ const CategoryListingScreen = ({ route, navigation }) => {
         },
         {
           id: '2',
-          title: 'Dell XPS 13',
+          title: 'MacBook Air M1 13-inch',
           price: 'Rs 280,000',
           location: 'Blue Area, Islamabad',
           image: '💻',
@@ -94,38 +94,11 @@ const CategoryListingScreen = ({ route, navigation }) => {
         },
         {
           id: '3',
-          title: 'iPad Pro 12.9',
-          price: 'Rs 180,000',
-          location: 'F-7 Markaz, Islamabad',
-          image: '📱',
-          time: '3 days ago'
-        }
-      ];
-    } else if (category.includes('job')) {
-      return [
-        {
-          id: '1',
-          title: 'Senior React Native Developer',
-          price: 'Rs 150,000 - 200,000',
-          location: 'Karachi, Pakistan',
-          image: '💼',
-          time: '2 days ago'
-        },
-        {
-          id: '2',
-          title: 'Frontend Developer',
-          price: 'Rs 120,000 - 150,000',
-          location: 'Lahore, Pakistan',
-          image: '💼',
-          time: '1 week ago'
-        },
-        {
-          id: '3',
-          title: 'UI/UX Designer',
-          price: 'Rs 100,000 - 130,000',
-          location: 'Islamabad, Pakistan',
-          image: '💼',
-          time: '3 days ago'
+          title: 'MacBook Pro M3 16-inch',
+          price: 'Rs 450,000',
+          location: 'Defence, Karachi',
+          image: '💻',
+          time: '1 month ago'
         }
       ];
     } else {

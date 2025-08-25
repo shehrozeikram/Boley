@@ -39,7 +39,7 @@ const RecentlyViewedScreen = ({ navigation, route }) => {
     },
     {
       id: '3',
-      title: 'MacBook Pro M2',
+      title: 'MacBook Pro M2 14-inch',
       price: 'Rs 350,000',
       location: 'Gulberg, Lahore',
       image: '💻',
@@ -48,19 +48,19 @@ const RecentlyViewedScreen = ({ navigation, route }) => {
     },
     {
       id: '4',
-      title: 'Golden Retriever Puppy',
-      price: 'Rs 45,000',
-      location: 'Clifton, Karachi',
-      image: '🐕',
-      category: 'Animals',
+      title: 'Toyota Corolla 2021',
+      price: 'Rs 3,800,000',
+      location: 'Bahria Town, Rawalpindi',
+      image: '🚗',
+      category: 'Vehicles',
       time: '2 weeks ago'
     },
     {
       id: '5',
-      title: 'Sony PlayStation 5',
-      price: 'Rs 120,000',
-      location: 'Defence, Karachi',
-      image: '🎮',
+      title: 'MacBook Air M1 13-inch',
+      price: 'Rs 280,000',
+      location: 'Blue Area, Islamabad',
+      image: '💻',
       category: 'Electronics',
       time: '3 weeks ago'
     },
@@ -84,29 +84,29 @@ const RecentlyViewedScreen = ({ navigation, route }) => {
     },
     {
       id: '8',
-      title: 'Sony PlayStation 5',
-      price: 'Rs 120,000',
+      title: 'MacBook Pro M3 16-inch',
+      price: 'Rs 450,000',
       location: 'Defence, Karachi',
-      image: '🎮',
+      image: '💻',
       category: 'Electronics',
       time: '2 months ago'
     },
     {
       id: '9',
-      title: 'Persian Cat',
-      price: 'Rs 35,000',
-      location: 'F-8 Markaz, Islamabad',
-      image: '🐱',
-      category: 'Animals',
+      title: '3 Bedroom Apartment',
+      price: 'Rs 22,000/month',
+      location: 'DHA, Lahore',
+      image: '🏠',
+      category: 'Property for Rent',
       time: '2 months ago'
     },
     {
       id: '10',
-      title: 'Leather Sofa Set',
-      price: 'Rs 85,000',
+      title: 'Honda City 2020',
+      price: 'Rs 3,200,000',
       location: 'Gulberg, Lahore',
-      image: '🛏️',
-      category: 'Furniture',
+      image: '🚗',
+      category: 'Vehicles',
       time: '3 months ago'
     }
   ];

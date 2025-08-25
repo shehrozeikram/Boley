@@ -57,80 +57,12 @@ const SearchScreen = ({ route, navigation }) => {
     // Electronics
     {
       id: '5',
-      title: 'MacBook Pro M2',
-      price: 'Rs 350,000',
-      location: 'Gulberg, Lahore',
-      image: '💻',
-      category: 'Electronics',
-      time: '1 week ago'
-    },
-    {
-      id: '6',
-      title: 'Dell XPS 13',
+      title: 'MacBook Air M1 13-inch',
       price: 'Rs 280,000',
       location: 'Blue Area, Islamabad',
       image: '💻',
       category: 'Electronics',
       time: '2 weeks ago'
-    },
-    // Jobs
-    {
-      id: '7',
-      title: 'Senior React Native Developer',
-      price: 'Rs 150,000 - 200,000',
-      location: 'Karachi, Pakistan',
-      image: '💼',
-      category: 'Jobs',
-      time: '2 days ago'
-    },
-    {
-      id: '8',
-      title: 'Frontend Developer',
-      price: 'Rs 120,000 - 150,000',
-      location: 'Lahore, Pakistan',
-      image: '💼',
-      category: 'Jobs',
-      time: '1 week ago'
-    },
-    // Services
-    {
-      id: '9',
-      title: 'House Cleaning Service',
-      price: 'Rs 2,000/day',
-      location: 'Islamabad, Pakistan',
-      image: '🔧',
-      category: 'Services',
-      time: '1 day ago'
-    },
-    // Animals
-    {
-      id: '10',
-      title: 'Golden Retriever Puppy',
-      price: 'Rs 45,000',
-      location: 'Clifton, Karachi',
-      image: '🐕',
-      category: 'Animals',
-      time: '2 weeks ago'
-    },
-    // Furniture
-    {
-      id: '11',
-      title: 'Leather Sofa Set',
-      price: 'Rs 85,000',
-      location: 'Gulberg, Lahore',
-      image: '🛏️',
-      category: 'Furniture',
-      time: '3 days ago'
-    },
-    // Fashion
-    {
-      id: '12',
-      title: 'Designer Dress Collection',
-      price: 'Rs 15,000',
-      location: 'Blue Area, Islamabad',
-      image: '👗',
-      category: 'Fashion',
-      time: '1 week ago'
     }
   ];
 
@@ -158,7 +90,7 @@ const SearchScreen = ({ route, navigation }) => {
 
   // Search suggestions
   const searchSuggestions = [
-    'Honda Civic', 'Apartment', 'MacBook', 'Developer', 'Puppy', 'Sofa'
+    'Honda Civic', 'Apartment', 'MacBook Pro', 'MacBook Air'
   ];
 
   return (
@@ -221,7 +153,7 @@ const SearchScreen = ({ route, navigation }) => {
             
             <Text style={styles.sectionTitle}>Browse Categories</Text>
             <View style={styles.categoriesGrid}>
-              {['Vehicles', 'Property', 'Electronics', 'Jobs', 'Services', 'Animals', 'Furniture', 'Fashion'].map((category, index) => (
+              {['Vehicles', 'Property', 'Electronics'].map((category, index) => (
                 <TouchableOpacity 
                   key={index}
                   style={styles.categoryCard}
@@ -230,11 +162,7 @@ const SearchScreen = ({ route, navigation }) => {
                   <Text style={styles.categoryIcon}>
                     {category === 'Vehicles' ? '🚗' : 
                      category === 'Property' ? '🏠' : 
-                     category === 'Electronics' ? '💻' : 
-                     category === 'Jobs' ? '💼' : 
-                     category === 'Services' ? '🔧' : 
-                     category === 'Animals' ? '🐕' : 
-                     category === 'Furniture' ? '🛏️' : '👗'}
+                     category === 'Electronics' ? '💻' : ''}
                   </Text>
                   <Text style={styles.categoryName}>{category}</Text>
                 </TouchableOpacity>
