@@ -11,17 +11,23 @@
     "ios-release": "cd ios && xcodebuild -workspace Boly.xcworkspace -scheme Boly -configuration Release -destination generic/platform=iOS -archivePath build/Boly.xcarchive archive"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native/new-app-screen": "0.80.1",
     "@react-navigation/bottom-tabs": "^7.4.4",
     "@react-navigation/native": "^7.1.16",
     "@react-navigation/stack": "^7.4.4",
+    "axios": "^1.12.2",
+    "node-fetch": "^3.3.2",
     "react": "19.1.0",
     "react-native": "0.80.1",
     "react-native-gesture-handler": "^2.27.2",
+    "react-native-image-picker": "^8.2.1",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-permissions": "^5.4.2",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.13.1",
-    "react-native-video": "^6.16.1"
+    "react-native-video": "^6.16.1",
+    "scheduler": "^0.27.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

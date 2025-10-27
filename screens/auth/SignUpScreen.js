@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,67 +10,134 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
+import { useAuth } from '../../contexts/AuthContext';
+
+// Custom Back Arrow Component
+const BackArrow = () => (
+  <View style={backArrowStyles.container}>
+    <View style={backArrowStyles.arrowHead} />
+    <View style={backArrowStyles.arrowLine} />
+  </View>
+);
+
+const backArrowStyles = StyleSheet.create({
+  container: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  arrowLine: {
+    width: 12,
+    height: 2,
+    backgroundColor: '#333',
+    position: 'absolute',
+    left: 6,
+  },
+  arrowHead: {
+    width: 8,
+    height: 8,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#333',
+    transform: [{ rotate: '45deg' }],
+    position: 'absolute',
+    left: 6,
+  },
+});
 
 const SignUpScreen = ({ navigation, route }) => {
-  const { onSignUpSuccess, returnToDetail } = route.params || {};
-  const [name, setName] = useState('');
+  const { returnToDetail } = route?.params || {};
+  const { register, isAuthenticated } = useAuth();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSignUp = () => {
-    if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
-      Alert.alert('Error', 'Please fill in all fields');
+  // Validation functions
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPhone = (phone) => {
+    // Server expects format like +923212345678 or +1234567890
+    // Updated to be more lenient: 7-15 digits after country code
+    const phoneRegex = /^\+[1-9]\d{7,14}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+
+
+  const handleSignUp = async () => {
+    // Clear previous errors
+    setError('');
+
+    // Validation
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+      setError('Please fill in all required fields');
       return;
     }
 
-    if (!email.includes('@')) {
-      Alert.alert('Error', 'Please enter a valid email address');
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters long');
+      setError('Password must be at least 6 characters long');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      setError('Passwords do not match');
+      return;
+    }
+
+    // Validate phone number if provided
+    if (phoneNumber.trim() && !isValidPhone(phoneNumber)) {
+      setError('Please enter a valid phone number with country code (e.g., +923212345678 for Pakistan, +1234567890 for US)');
       return;
     }
 
     setIsLoading(true);
     
-    // Simulate signup process
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // Call success callback if provided
-      if (onSignUpSuccess) {
-        onSignUpSuccess();
-      }
-      
-      Alert.alert(
-        'Success',
-        'Account created successfully!',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              if (returnToDetail) {
-                // Go back to detail screen
-                navigation.goBack();
-              } else {
-                // Navigate back to previous screen
-                navigation.goBack();
-              }
+    try {
+            // Prepare user data for registration - exactly matching API fields
+            const userData = {
+              firstName: firstName.trim(),
+              lastName: lastName.trim(),
+              email: email.trim(),
+              password: password,
+              address: address.trim(),
+              phoneNumber: phoneNumber.trim(),
+            };
+
+            const registerResult = await register(userData);
+            
+            if (registerResult.success) {
+              navigation.navigate('VerifyOTP', {
+                emailOrPhone: email,
+                userId: registerResult.data?.userId || registerResult.data?.user?._id,
+                userData: userData,
+                returnToDetail: returnToDetail,
+                demoOtp: registerResult.data?.otp
+              });
+            } else {
+              setError(registerResult.error || 'Registration failed. Please try again.');
             }
-          }
-        ]
-      );
-    }, 1500);
+    } catch (error) {
+      console.error('Signup error:', error);
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -82,9 +149,16 @@ const SignUpScreen = ({ navigation, route }) => {
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Home');
+              }
+            }}
+            activeOpacity={0.7}
           >
-            <Text style={styles.backIcon}>←</Text>
+            <BackArrow />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Sign Up</Text>
           <View style={styles.placeholder} />
@@ -97,21 +171,37 @@ const SignUpScreen = ({ navigation, route }) => {
           </View>
 
           <View style={styles.form}>
+            {/* First Name */}
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Full Name</Text>
+              <Text style={styles.inputLabel}>First Name *</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your full name"
+                placeholder="Enter your first name"
                 placeholderTextColor="#999"
-                value={name}
-                onChangeText={setName}
+                value={firstName}
+                onChangeText={setFirstName}
                 autoCapitalize="words"
                 autoCorrect={false}
               />
             </View>
 
+            {/* Last Name */}
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Email</Text>
+              <Text style={styles.inputLabel}>Last Name *</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your last name"
+                placeholderTextColor="#999"
+                value={lastName}
+                onChangeText={setLastName}
+                autoCapitalize="words"
+                autoCorrect={false}
+              />
+            </View>
+
+            {/* Email */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Email *</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email"
@@ -124,8 +214,44 @@ const SignUpScreen = ({ navigation, route }) => {
               />
             </View>
 
+            {/* Phone Number */}
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Password</Text>
+              <Text style={styles.inputLabel}>Phone Number</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="+923212345678"
+                placeholderTextColor="#999"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+                      <Text style={styles.helpText}>
+                        Include country code (e.g., +923212345678 for Pakistan, +1234567890 for US)
+                      </Text>
+            </View>
+
+            {/* Address */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Address</Text>
+              <TextInput
+                style={[styles.input, styles.textArea]}
+                placeholder="Enter your address"
+                placeholderTextColor="#999"
+                value={address}
+                onChangeText={setAddress}
+                multiline
+                numberOfLines={3}
+                autoCapitalize="words"
+                autoCorrect={false}
+              />
+            </View>
+
+
+            {/* Password */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Password *</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Create a password"
@@ -138,8 +264,9 @@ const SignUpScreen = ({ navigation, route }) => {
               />
             </View>
 
+            {/* Confirm Password */}
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Confirm Password</Text>
+              <Text style={styles.inputLabel}>Confirm Password *</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Confirm your password"
@@ -152,14 +279,24 @@ const SignUpScreen = ({ navigation, route }) => {
               />
             </View>
 
+            {/* Error Message */}
+            {error ? (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            ) : null}
+
+            {/* Sign Up Button */}
             <TouchableOpacity 
               style={[styles.signupButton, isLoading && styles.signupButtonDisabled]}
               onPress={handleSignUp}
               disabled={isLoading}
             >
-              <Text style={styles.signupButtonText}>
-                {isLoading ? 'Creating Account...' : 'Create Account'}
-              </Text>
+              {isLoading ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <Text style={styles.signupButtonText}>Create Account</Text>
+              )}
             </TouchableOpacity>
 
             <View style={styles.divider}>
@@ -267,6 +404,25 @@ const styles = StyleSheet.create({
     color: '#333',
     borderWidth: 1,
     borderColor: '#e0e0e0',
+  },
+  textArea: {
+    height: 80,
+    textAlignVertical: 'top',
+  },
+  helpText: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 5,
+    fontStyle: 'italic',
+  },
+  errorContainer: {
+    marginBottom: 15,
+    paddingHorizontal: 5,
+  },
+  errorText: {
+    color: '#e74c3c',
+    fontSize: 14,
+    textAlign: 'center',
   },
   signupButton: {
     backgroundColor: '#4ecdc4',

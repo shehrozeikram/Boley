@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,28 +7,158 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  Image,
+  Platform,
+  ActivityIndicator,
+  Animated,
 } from 'react-native';
+import { api } from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
+
+// Custom Back Arrow Component
+const BackArrow = () => (
+  <View style={backArrowStyles.container}>
+    <View style={backArrowStyles.arrowHead} />
+    <View style={backArrowStyles.arrowLine} />
+  </View>
+);
+
+const backArrowStyles = StyleSheet.create({
+  container: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  arrowLine: {
+    width: 12,
+    height: 2,
+    backgroundColor: '#333',
+    position: 'absolute',
+    left: 6,
+  },
+  arrowHead: {
+    width: 8,
+    height: 8,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#333',
+    transform: [{ rotate: '45deg' }],
+    position: 'absolute',
+    left: 6,
+  },
+});
 
 const DetailScreen = ({ route, navigation }) => {
-  // Removed login state - always show contact seller
+  // Get product ID from route params (required)
+  const { productId } = route.params || {};
   
-  // Get category and item data from route params
-  const { category, item } = route.params || {};
+  // Authentication context
+  const { isAuthenticated, user } = useAuth();
   
-  // Check if we have valid data
-  if (!category || !item) {
+  // State for API data
+  const [apiProductData, setApiProductData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  // State to track if we should auto-proceed with contact seller after login
+  const [shouldProceedWithContact, setShouldProceedWithContact] = useState(false);
+  
+  // Animation for skeleton loading
+  const shimmerAnimation = useRef(new Animated.Value(0)).current;
+
+  // Start shimmer animation when loading
+  useEffect(() => {
+    if (loading) {
+      const shimmer = Animated.loop(
+        Animated.sequence([
+          Animated.timing(shimmerAnimation, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(shimmerAnimation, {
+            toValue: 0,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+        ])
+      );
+      shimmer.start();
+      return () => shimmer.stop();
+    }
+  }, [loading, shimmerAnimation]);
+
+  // Handle auto-proceed with contact seller after successful login/signup
+  useEffect(() => {
+    if (isAuthenticated && shouldProceedWithContact) {
+      setShouldProceedWithContact(false);
+      // Small delay to ensure the screen is fully loaded
+      setTimeout(() => {
+        proceedWithContactSeller();
+      }, 500);
+    }
+  }, [isAuthenticated, shouldProceedWithContact]);
+
+  // Fetch product data
+  useEffect(() => {
+    const fetchProductData = async () => {
+      if (!productId) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const result = await api.items.getProductById(productId);
+        setApiProductData(result);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductData();
+  }, [productId]);
+
+  // Refetch function
+  const refetch = async () => {
+    if (!productId) return;
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await api.items.getProductById(productId);
+      setApiProductData(result);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Check if we have a product ID (required for API call)
+  if (!productId) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Home');
+              }
+            }}
+            activeOpacity={0.7}
           >
-            <Text style={styles.backIcon}>←</Text>
+            <BackArrow />
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
-          <Text style={styles.errorText}>No item data available</Text>
+          <Text style={styles.errorText}>Product ID is required</Text>
           <TouchableOpacity style={styles.backToHomeButton} onPress={() => navigation.navigate('Home')}>
             <Text style={styles.backToHomeButtonText}>Back to Home</Text>
           </TouchableOpacity>
@@ -36,236 +166,295 @@ const DetailScreen = ({ route, navigation }) => {
       </SafeAreaView>
     );
   }
-  
-  // Generate similar products data
-  // Removed getSimilarProducts function - no longer needed
 
-  // Dynamic data based on category
-  const getDetailData = (categoryName, itemData) => {
-    const category = categoryName?.toLowerCase() || '';
-    
-    if (category.includes('vehicle')) {
-      return {
-        id: itemData?.id || '1',
-        title: itemData?.title || 'Honda Civic 2020',
-        price: itemData?.price || 'Rs 4,500,000',
-        originalPrice: 'Rs 5,200,000',
-        location: itemData?.location || 'F-7 Markaz, Islamabad',
-        postedDate: itemData?.time || '1 day ago',
-        condition: 'Used',
-        brand: 'Honda',
-        model: 'Civic',
-        year: '2020',
-        mileage: '45,000 km',
-        fuelType: 'Petrol',
-        transmission: 'Automatic',
-        engineCapacity: '1.8L',
-        color: 'White',
-        description: 'Well-maintained Honda Civic 2020 with low mileage. Single owner, full service history available. Excellent condition both interior and exterior. Reason for selling: moving abroad.',
-        images: ['🚗', '🚗', '🚗', '🚗'],
-        seller: {
-          name: 'Sara Ahmed',
-          rating: 4.9,
-          totalAds: 8,
-          memberSince: '2020',
-          verified: true,
-        },
-        specifications: {
-          'Make': 'Honda',
-          'Model': 'Civic',
-          'Year': '2020',
-          'Mileage': '45,000 km',
-          'Fuel Type': 'Petrol',
-          'Transmission': 'Automatic',
-          'Engine': '1.8L i-VTEC',
-          'Color': 'White',
-          'Body Type': 'Sedan',
-          'Doors': '4',
-          'Seats': '5',
-          'Drive Type': 'Front Wheel Drive',
-        },
-        features: [
-          'Power Steering',
-          'Air Conditioning',
-          'Power Windows',
-          'Central Locking',
-          'ABS Brakes',
-          'Airbags',
-          'Bluetooth Connectivity',
-          'Backup Camera',
-          'Alloy Wheels',
-          'Fog Lights',
-        ],
-        documents: [
-          'Registration Book',
-          'Insurance Valid',
-          'Tax Paid',
-          'Service History',
-        ],
-        category: 'Vehicle'
-      };
-    } else if (category.includes('property')) {
-      return {
-        id: itemData?.id || '1',
-        title: itemData?.title || '3 Bedroom Apartment for Rent',
-        price: itemData?.price || 'Rs 25,000/month',
-        originalPrice: 'Rs 30,000/month',
-        location: itemData?.location || 'DHA, Lahore',
-        postedDate: itemData?.time || '3 days ago',
-        condition: 'Furnished',
-        propertyType: 'Apartment',
-        bedrooms: 3,
-        bathrooms: 2,
-        area: '1,200 sq ft',
-        floor: '3rd Floor',
-        totalFloors: 8,
-        description: 'Beautiful 3-bedroom apartment in prime DHA location. Fully furnished with modern amenities. Close to schools, hospitals, and shopping centers. Available for immediate possession.',
-        images: ['🏠', '🏠', '🏠', '🏠'],
-        seller: {
-          name: 'Real Estate Plus',
-          rating: 4.7,
-          totalAds: 45,
-          memberSince: '2018',
-          verified: true,
-        },
-        specifications: {
-          'Property Type': 'Apartment',
-          'Bedrooms': '3',
-          'Bathrooms': '2',
-          'Area': '1,200 sq ft',
-          'Floor': '3rd Floor',
-          'Total Floors': '8',
-          'Furnishing': 'Furnished',
-          'Parking': '1 Car',
-          'Balcony': 'Yes',
-          'Lift': 'Yes',
-          'Security': '24/7',
-        },
-        amenities: [
-          'Air Conditioning',
-          'Heating',
-          'Kitchen Appliances',
-          'Washing Machine',
-          'Refrigerator',
-          'Microwave',
-          'Dishwasher',
-          'Balcony',
-          'Parking Space',
-          'Security System',
-          'Intercom',
-          'Power Backup',
-        ],
-        locationDetails: {
-          'Distance to Mall': '500m',
-          'Distance to Hospital': '1.2km',
-          'Distance to School': '800m',
-          'Distance to Metro': '1.5km',
-          'Distance to Airport': '15km',
-        },
-        nearbyPlaces: [
-          'DHA Shopping Center',
-          'CMH Hospital',
-          'Beaconhouse School',
-          'Metro Station',
-          'Parks',
-        ],
-        category: 'Property'
-      };
-    } else if (category.includes('electronics')) {
-      return {
-        id: itemData?.id || '1',
-        title: itemData?.title || 'MacBook Pro M2 14-inch',
-        price: itemData?.price || 'Rs 350,000',
-        originalPrice: 'Rs 420,000',
-        location: itemData?.location || 'Gulberg, Lahore',
-        postedDate: itemData?.time || '1 week ago',
-        condition: 'Used',
-        brand: 'Apple',
-        model: 'MacBook Pro M2',
-        warranty: '6 months remaining',
-        description: 'Excellent condition MacBook Pro M2 with 14-inch display. Perfect for professional work and development. Comes with original charger and box. Reason for selling: upgrading to M3.',
-        images: ['💻', '💻', '💻', '💻'],
-        seller: {
-          name: 'Tech Solutions',
-          rating: 4.6,
-          totalAds: 23,
-          memberSince: '2019',
-          verified: true,
-        },
-        specifications: {
-          'Brand': 'Apple',
-          'Model': 'MacBook Pro M2',
-          'Screen Size': '14 inches',
-          'Processor': 'M2 Chip',
-          'RAM': '16GB',
-          'Storage': '512GB SSD',
-          'Graphics': 'Integrated',
-          'OS': 'macOS Ventura',
-          'Color': 'Space Gray',
-          'Year': '2022',
-        },
-        features: [
-          'Retina Display',
-          'Touch Bar',
-          'Backlit Keyboard',
-          'Force Touch Trackpad',
-          'Thunderbolt 4',
-          'Wi-Fi 6',
-          'Bluetooth 5.0',
-          'FaceTime HD Camera',
-          'Studio Quality Mics',
-          'Long Battery Life',
-        ],
-        warranty: {
-          'Warranty Type': 'Apple Care',
-          'Remaining': '6 months',
-          'Transferable': 'Yes',
-          'Coverage': 'Hardware + Software',
-        },
-        accessories: [
-          'Original Charger',
-          'Original Box',
-          'User Manual',
-          'Cleaning Cloth',
-        ],
-        category: 'Electronics'
-      };
-    } else {
-      // Default to vehicle data
-      return getDetailData('vehicle', itemData);
-    }
+  // Skeleton Loading Component
+  const SkeletonBox = ({ width, height, style = {} }) => {
+    const shimmerOpacity = shimmerAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.3, 0.7],
+    });
+
+    return (
+      <Animated.View style={[styles.skeletonBox, { width, height, opacity: shimmerOpacity }, style]} />
+    );
   };
 
-  const detailData = getDetailData(category, item);
+  const SkeletonText = ({ width, height = 16, style = {} }) => (
+    <SkeletonBox width={width} height={height} style={[styles.skeletonText, style]} />
+  );
 
-  // const handleCall = () => {
-  //   Alert.alert('Call Seller', `Calling ${detailData.seller.name}...`);
-  // };
+  const SkeletonImage = ({ width, height, style = {} }) => (
+    <SkeletonBox width={width} height={height} style={[styles.skeletonImage, style]} />
+  );
 
-  // const handleChat = () => {
-  //   Alert.alert('Start Chat', 'Opening chat with seller...');
-  // };
+  // Show skeleton loading state
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          {/* Header Skeleton */}
+          <View style={styles.header}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => {
+                if (navigation.canGoBack()) {
+                  navigation.goBack();
+                } else {
+                  navigation.navigate('Home');
+                }
+              }}
+              activeOpacity={0.7}
+            >
+              <BackArrow />
+            </TouchableOpacity>
+            <View style={styles.headerActions}>
+              <SkeletonBox width={40} height={40} style={styles.skeletonHeaderAction} />
+            </View>
+          </View>
 
-  // Removed handleSimilarProductPress function - no longer needed
+          {/* Image Skeleton */}
+          <View style={styles.imageContainer}>
+            <SkeletonImage width="100%" height={300} />
+          </View>
+
+          {/* Price and Title Section Skeleton */}
+          <View style={styles.priceSection}>
+            <SkeletonText width="60%" height={28} style={{ marginBottom: 8 }} />
+            <SkeletonText width="40%" height={20} style={{ marginBottom: 12 }} />
+            <SkeletonText width="80%" height={24} style={{ marginBottom: 8 }} />
+            <View style={styles.locationRow}>
+              <SkeletonText width="50%" height={16} />
+              <SkeletonText width="30%" height={16} style={{ marginLeft: 10 }} />
+            </View>
+          </View>
+
+          {/* Condition Badge Skeleton */}
+          <View style={styles.conditionContainer}>
+            <SkeletonBox width={80} height={30} style={styles.skeletonBadge} />
+          </View>
+
+          {/* Description Skeleton */}
+          <View style={styles.section}>
+            <SkeletonText width="30%" height={20} style={{ marginBottom: 15 }} />
+            <SkeletonText width="100%" height={16} style={{ marginBottom: 8 }} />
+            <SkeletonText width="95%" height={16} style={{ marginBottom: 8 }} />
+            <SkeletonText width="85%" height={16} style={{ marginBottom: 8 }} />
+            <SkeletonText width="90%" height={16} />
+          </View>
+
+          {/* Specifications Skeleton */}
+          <View style={styles.section}>
+            <SkeletonText width="40%" height={20} style={{ marginBottom: 15 }} />
+            {[1, 2, 3, 4, 5].map((item) => (
+              <View key={item} style={styles.specItem}>
+                <SkeletonText width="35%" height={16} />
+                <SkeletonText width="25%" height={16} />
+              </View>
+            ))}
+          </View>
+
+          {/* Features Skeleton */}
+          <View style={styles.section}>
+            <SkeletonText width="30%" height={20} style={{ marginBottom: 15 }} />
+            {[1, 2, 3, 4].map((item) => (
+              <View key={item} style={styles.featureItem}>
+                <SkeletonBox width={16} height={16} style={styles.skeletonBullet} />
+                <SkeletonText width="80%" height={16} />
+              </View>
+            ))}
+          </View>
+
+          {/* Seller Information Skeleton */}
+          <View style={styles.section}>
+            <SkeletonText width="50%" height={20} style={{ marginBottom: 15 }} />
+            <View style={styles.sellerCard}>
+              <View style={styles.sellerInfo}>
+                <SkeletonText width="60%" height={18} style={{ marginBottom: 8 }} />
+                <View style={styles.sellerStats}>
+                  <SkeletonText width="25%" height={14} />
+                  <SkeletonText width="20%" height={14} />
+                  <SkeletonText width="30%" height={14} />
+                </View>
+                <SkeletonBox width={70} height={24} style={styles.skeletonVerifiedBadge} />
+              </View>
+            </View>
+          </View>
+
+          {/* Bottom Spacing */}
+          <View style={styles.bottomSpacing} />
+        </ScrollView>
+
+        {/* Action Bar Skeleton */}
+        <View style={styles.actionBar}>
+          <SkeletonBox width="100%" height={56} style={styles.skeletonActionButton} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Home');
+              }
+            }}
+            activeOpacity={0.7}
+          >
+            <BackArrow />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.errorText}>Failed to load product details</Text>
+          <TouchableOpacity style={styles.backToHomeButton} onPress={() => navigation.navigate('Home')}>
+            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.retryButton} onPress={refetch}>
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+  
+  // Transform API data to match existing UI structure
+  const transformApiData = (apiData) => {
+    if (!apiData) return null;
+
+    return {
+      id: apiData._id || apiData.id,
+      title: apiData.title || 'Product',
+      price: apiData.price ? `Rs ${apiData.price.toLocaleString()}` : 'Price not available',
+      originalPrice: null, // API doesn't provide original price
+      location: apiData.neighborhoodId?.name && apiData.cityId?.name 
+        ? `${apiData.neighborhoodId.name}, ${apiData.cityId.name}` 
+        : apiData.regionId?.name || 'Location not specified',
+      postedDate: apiData.createdAt ? new Date(apiData.createdAt).toLocaleDateString() : 'Date not available',
+      condition: 'Available', // API doesn't provide condition, defaulting to available
+      description: apiData.description || 'No description available',
+      images: apiData.images && apiData.images.length > 0 
+        ? apiData.images.map(img => ({ uri: img.imageUrl }))
+        : [{ uri: 'https://via.placeholder.com/300x200?text=No+Image' }],
+      seller: {
+        name: apiData.userId ? `${apiData.userId.firstName} ${apiData.userId.lastName}` : 'Seller',
+        rating: 4.5, // Default rating since API doesn't provide
+        totalAds: 0, // Default since API doesn't provide
+        memberSince: apiData.userId?.createdAt ? new Date(apiData.userId.createdAt).getFullYear().toString() : '2023',
+        verified: apiData.userId?.isVerified || false,
+        phone: apiData.userId?.phoneNumber || '+92 300 1234567',
+        email: apiData.userId?.email || 'seller@email.com',
+      },
+      specifications: {
+        'Item Number': apiData.itemNumber || 'N/A',
+        'Category': apiData.subCategoryId?.name || 'N/A',
+        'Region': apiData.regionId?.name || 'N/A',
+        'City': apiData.cityId?.name || 'N/A',
+        'Neighborhood': apiData.neighborhoodId?.name || 'N/A',
+        'Status': apiData.process || 'N/A',
+        'Featured': apiData.isFeatured ? 'Yes' : 'No',
+        'View Count': apiData.viewCount || 0,
+        'Available': apiData.available ? 'Yes' : 'No',
+      },
+      features: apiData.checkboxDetails ? apiData.checkboxDetails.map(item => 
+        typeof item === 'object' ? item.checkboxValue || item.name || JSON.stringify(item) : item
+      ) : [],
+      category: apiData.subCategoryId?.name || 'Product',
+      apiData: apiData, // Keep original API data for reference
+    };
+  };
+
+  // Only use API data - no fallback
+  const detailData = apiProductData ? transformApiData(apiProductData) : null;
+
+  // Show error if no API data available
+  if (!loading && !error && !detailData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Home');
+              }
+            }}
+            activeOpacity={0.7}
+          >
+            <BackArrow />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.errorText}>No product data available</Text>
+          <TouchableOpacity style={styles.backToHomeButton} onPress={() => navigation.navigate('Home')}>
+            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
 
   const handleContactSeller = () => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      Alert.alert(
+        'Login Required',
+        'You need to login to contact the seller. Would you like to login or create an account?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Login', 
+            onPress: () => {
+              setShouldProceedWithContact(true);
+              navigation.navigate('Login', {
+                returnToDetail: true
+              });
+            }
+          },
+          { 
+            text: 'Sign Up', 
+            onPress: () => {
+              setShouldProceedWithContact(true);
+              navigation.navigate('SignUp', {
+                returnToDetail: true
+              });
+            }
+          }
+        ]
+      );
+      return;
+    }
+
+    // If authenticated, proceed with contact seller
+    proceedWithContactSeller();
+  };
+
+  const proceedWithContactSeller = () => {
     // Show seller contact information with fallbacks
     const sellerName = detailData?.seller?.name || 'Seller';
     const sellerRating = detailData?.seller?.rating || '4.5';
     const memberSince = detailData?.seller?.memberSince || '2023';
+    const sellerPhone = detailData?.seller?.phone || '+92 300 1234567';
+    const sellerEmail = detailData?.seller?.email || `${sellerName.toLowerCase().replace(' ', '.')}@email.com`;
     
     Alert.alert(
       'Contact Seller',
-      `Name: ${sellerName}\nPhone: +92 300 1234567\nEmail: ${sellerName.toLowerCase().replace(' ', '.')}@email.com\nRating: ⭐ ${sellerRating}\nMember since: ${memberSince}`,
+      `Name: ${sellerName}\nPhone: ${sellerPhone}\nEmail: ${sellerEmail}\nRating: ⭐ ${sellerRating}\nMember since: ${memberSince}`,
       [
         { text: 'OK', style: 'default' }
       ]
     );
   };
 
-  // const handleShare = () => {
-  //   Alert.alert('Share', 'Sharing this listing...');
-  // };
 
   const renderSpecifications = () => {
     if (!detailData.specifications) return null;
@@ -286,18 +475,25 @@ const DetailScreen = ({ route, navigation }) => {
   };
 
   const renderFeatures = () => {
-    if (!detailData.features) return null;
+    if (!detailData.features || !Array.isArray(detailData.features)) return null;
     
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Features</Text>
         <View style={styles.featuresList}>
-          {detailData.features.map((feature, index) => (
-            <View key={index} style={styles.featureItem}>
-              <Text style={styles.featureBullet}>•</Text>
-              <Text style={styles.featureText}>{feature}</Text>
-            </View>
-          ))}
+          {detailData.features.map((feature, index) => {
+            // Ensure feature is a string
+            const featureText = typeof feature === 'string' ? feature : 
+                               typeof feature === 'object' ? (feature.checkboxValue || feature.name || JSON.stringify(feature)) : 
+                               String(feature);
+            
+            return (
+              <View key={index} style={styles.featureItem}>
+                <Text style={styles.featureBullet}>•</Text>
+                <Text style={styles.featureText}>{featureText}</Text>
+              </View>
+            );
+          })}
         </View>
       </View>
     );
@@ -490,22 +686,40 @@ const DetailScreen = ({ route, navigation }) => {
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Home');
+              }
+            }}
+            activeOpacity={0.7}
           >
-            <Text style={styles.backIcon}>←</Text>
+            <BackArrow />
           </TouchableOpacity>
           <View style={styles.headerActions}>
-            {/* <TouchableOpacity style={styles.headerAction} onPress={handleShare}>
-              <Text style={styles.headerActionIcon}>📤</Text>
-            </TouchableOpacity> */}
-            {/* Removed favorite button */}
+            {/* Header actions can be added here if needed */}
           </View>
         </View>
 
         {/* Main Image */}
         <View style={styles.imageContainer}>
           <View style={styles.mainImage}>
-            <Text style={styles.imagePlaceholder}>{detailData.images[0]}</Text>
+            {typeof detailData.images[0] === 'string' ? (
+              <Text style={styles.imagePlaceholder}>{detailData.images[0]}</Text>
+            ) : detailData.images[0]?.uri ? (
+              <Image 
+                source={{ uri: detailData.images[0].uri }} 
+                style={styles.mainImageTag} 
+                resizeMode="cover"
+              />
+            ) : (
+              <Image 
+                source={detailData.images[0]} 
+                style={styles.mainImageTag} 
+                resizeMode="cover"
+              />
+            )}
           </View>
         </View>
 
@@ -589,6 +803,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+    paddingTop: Platform.OS === 'android' ? 10 : 0,
   },
   scrollView: {
     flex: 1,
@@ -630,6 +845,10 @@ const styles = StyleSheet.create({
   },
   imagePlaceholder: {
     fontSize: 80,
+  },
+  mainImageTag: {
+    width: '100%',
+    height: '100%',
   },
   priceSection: {
     backgroundColor: '#fff',
@@ -865,6 +1084,59 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 15,
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: '#4ecdc4',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  // Skeleton Loading Styles
+  skeletonBox: {
+    backgroundColor: '#e1e9ee',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  skeletonText: {
+    backgroundColor: '#e1e9ee',
+    borderRadius: 4,
+  },
+  skeletonImage: {
+    backgroundColor: '#e1e9ee',
+    borderRadius: 0,
+  },
+  skeletonHeaderAction: {
+    borderRadius: 20,
+  },
+  skeletonBadge: {
+    borderRadius: 15,
+  },
+  skeletonBullet: {
+    borderRadius: 8,
+  },
+  skeletonVerifiedBadge: {
+    borderRadius: 12,
+  },
+  skeletonActionButton: {
+    borderRadius: 25,
   },
 });
 

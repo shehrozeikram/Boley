@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,54 +10,117 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { useAuth } from '../../contexts/AuthContext';
+
+// Custom Back Arrow Component
+const BackArrow = () => (
+  <View style={backArrowStyles.container}>
+    <View style={backArrowStyles.arrowHead} />
+    <View style={backArrowStyles.arrowLine} />
+  </View>
+);
+
+const backArrowStyles = StyleSheet.create({
+  container: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  arrowLine: {
+    width: 12,
+    height: 2,
+    backgroundColor: '#333',
+    position: 'absolute',
+    left: 6,
+  },
+  arrowHead: {
+    width: 8,
+    height: 8,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: '#333',
+    transform: [{ rotate: '45deg' }],
+    position: 'absolute',
+    left: 6,
+  },
+});
 
 const LoginScreen = ({ navigation, route }) => {
-  const { onLoginSuccess, returnToDetail } = route.params || {};
-  const [email, setEmail] = useState('');
+  const { returnToDetail } = route?.params || {};
+  const { login, isAuthenticated } = useAuth();
+  const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [loginCompleted, setLoginCompleted] = useState(false);
 
-  const handleLogin = () => {
-    if (!email.trim() || !password.trim()) {
+  // Handle navigation when authentication state changes
+  useEffect(() => {
+    if (isAuthenticated && loginCompleted) {
+      // Wait a moment for the authentication state to fully propagate
+      setTimeout(() => {
+        if (navigation) {
+          if (returnToDetail) {
+            // Go back to detail screen
+            navigation.goBack();
+          } else {
+            // Reset navigation stack to main app (dismisses all modals)
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'MainTabs' }],
+            });
+          }
+        }
+      }, 500); // Give time for authentication state to propagate
+    }
+  }, [isAuthenticated, loginCompleted, navigation, returnToDetail]);
+
+  const handleLogin = async () => {
+    if (!emailOrPhone.trim() || !password.trim()) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
-    if (!email.includes('@')) {
-      Alert.alert('Error', 'Please enter a valid email address');
+    // Basic validation - check if it's email or phone
+    const isEmail = emailOrPhone.includes('@');
+    const isPhone = emailOrPhone.startsWith('+') && /^\+\d+$/.test(emailOrPhone.replace(/\s/g, ''));
+    
+    if (!isEmail && !isPhone) {
+      Alert.alert('Error', 'Please enter a valid email address or phone number');
       return;
     }
 
     setIsLoading(true);
     
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const result = await login({ emailOrPhone, password });
       
-      // Call success callback if provided
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-      
-      Alert.alert(
-        'Success',
-        'Login successful!',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              if (returnToDetail) {
-                // Go back to detail screen
-                navigation.goBack();
-              } else {
-                // Navigate back to previous screen
-                navigation.goBack();
+      if (result.success) {
+        // Mark login as completed - this will trigger the useEffect to handle navigation
+        setLoginCompleted(true);
+        
+        // Show success message
+        Alert.alert(
+          'Success',
+          'Login successful! Taking you to the main app...',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Navigation will be handled by useEffect when isAuthenticated becomes true
               }
             }
-          }
-        ]
-      );
-    }, 1500);
+          ]
+        );
+      } else {
+        Alert.alert('Error', result.error || 'Login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -69,9 +132,16 @@ const LoginScreen = ({ navigation, route }) => {
         <View style={styles.header}>
           <TouchableOpacity 
             style={styles.backButton}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.navigate('Home');
+              }
+            }}
+            activeOpacity={0.7}
           >
-            <Text style={styles.backIcon}>←</Text>
+            <BackArrow />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Login</Text>
           <View style={styles.placeholder} />
@@ -85,13 +155,13 @@ const LoginScreen = ({ navigation, route }) => {
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Email</Text>
+              <Text style={styles.inputLabel}>Email or Phone</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Enter your email"
+                placeholder="Enter your email or phone number"
                 placeholderTextColor="#999"
-                value={email}
-                onChangeText={setEmail}
+                value={emailOrPhone}
+                onChangeText={setEmailOrPhone}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}

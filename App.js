@@ -10,6 +10,8 @@ import React, { useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SplashScreen from './screens/SplashScreen';
 import AppNavigator from './navigation/AppNavigator';
+import { AuthProvider } from './contexts/AuthContext';
+import { LoadingProvider } from './contexts/LoadingContext';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -24,7 +26,11 @@ function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppNavigator />
+      <AuthProvider>
+        <LoadingProvider>
+          <AppNavigator />
+        </LoadingProvider>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }
